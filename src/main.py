@@ -1,0 +1,721 @@
+"""
+👨‍💻 Copyright (C) $2024 Omer Tariq KAIST. - All Rights Reserved
+
+Project: TRIP
+Manuscript is submitted to IEEE Sensor Journal
+
+"""
+
+import os
+import time
+from os import path as osp
+import numpy as np
+import torch
+import json
+import math
+
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from scipy.interpolate import interp1d
+from tensorboardX import SummaryWriter
+from torch.utils.data import DataLoader
+from sklearn import metrics
+from preprocess.data_processor import *
+from metric import compute_ate_rte, compute_absolute_trajectory_error, compute_drift
+# from models.MobileNetV2 import *
+# from models.MobileNet import *
+# from models.MnasNet import *
+# from models.IMUNet import *
+# from models.EfficientnetB0 import *
+#from models.ResNet1D_dws import *
+from models.HResCSA import *
+from utils import *
+import argparse
+args = argparse.Namespace()
+from torch.autograd import Variable
+
+_fc_config = {'fc_dim': 512, 'in_dim': 7, 'dropout': 0.5, 'trans_planes': 128}
+
+# Define MLP-specific configuration
+_mlp_config = {
+    'mlp_dim': 512,         # Hidden dimension for MLP layers
+    'num_layers': 2,        # Number of MLP layers
+    'dropout': 0.3,         # Dropout probability for MLP layers
+    'trans_planes': 128     # Optional: dimensionality reduction in transition layer
+}
+
+# Get the model architecture
+def get_model(arch):
+    n_class = 2
+    arch = args.arch
+    if arch == 'HResCSA':
+        network = HResCSA(num_inputs=6, num_outputs=n_class, block_type=BasicBlock1D, group_sizes=[2, 2, 2, 2], base_plane=64, output_block=MLPOutputModule, kernel_size=3, **_mlp_config)
+    # if arch == 'ResNet1D':
+    #     network = ResNet1D(6, n_class, BasicBlock1D, [2, 2, 2, 2],
+    #                         base_plane=64, output_block=FCOutputModule, kernel_size=3, **_fc_config)
+    # elif arch == 'MobileNetV2':
+    #     network = MobileNetV2()
+    # elif arch == 'MobileNet':
+    #     network = MobileNet(channels=[32, 64, 128, 256, 512, 1024], width_multiplier=1)
+    # elif arch == 'MnasNet':
+    #     network = MnasNet(n_class=2)
+    # elif arch == 'EfficientNet':
+    #     network = EfficientNetB0(n_class=2)
+    # elif arch == 'IMUNet':
+    #     network = IMUNet(num_classes= 2, input_size= (1,6,200) ,sampling_rate= 200, num_T = 32 , num_S = 64 , hidden = 64, dropout_rate = 0.5)
+    else:
+        raise ValueError('Invalid architecture: ', args.arch)
+    return network
+
+
+def run_test(network, data_loader, device, eval_mode=True):
+    targets_all = []
+    preds_all = []
+    if eval_mode:
+        network.eval()
+    for bid, (feat, targ, _, _) in enumerate(data_loader):
+        pred = network(feat.to(device)).cpu().detach().numpy()
+        targets_all.append(targ.detach().numpy())
+        preds_all.append(pred)
+    targets_all = np.concatenate(targets_all, axis=0)
+    preds_all = np.concatenate(preds_all, axis=0)
+    return targets_all, preds_all
+
+
+def add_summary(writer, loss, step, mode):
+    names = '{0}_loss/loss_x,{0}_loss/loss_y,{0}_loss/loss_z,{0}_loss/loss_sin,{0}_loss/loss_cos'.format(
+        mode).split(',')
+
+    for i in range(loss.shape[0]):
+        writer.add_scalar(names[i], loss[i], step)
+    writer.add_scalar('{}_loss/avg'.format(mode), np.mean(loss), step)
+
+
+# Moving average function for test
+def simple_moving_average(data, window_size):
+    """
+    Calculate the simple moving average of a given data array using a specified window size.
+    
+    Args:
+        data: The input data array.
+        window_size: The size of the moving window.
+    
+    Returns:
+        The array of simple moving averages.
+    """
+    cumsum = np.cumsum(data)
+    cumsum[window_size:] = cumsum[window_size:] - cumsum[:-window_size]
+    return cumsum[window_size - 1:] / window_size
+
+
+def get_dataset(root_dir, data_list, args, **kwargs):
+    mode = kwargs.get('mode', 'train')
+
+    random_shift, shuffle, transforms, grv_only = 0, False, None, False
+    if mode == 'train':
+        random_shift = args.step_size // 2
+        shuffle = True
+        transforms = RandomHoriRotate(math.pi * 2)
+    elif mode == 'val':
+        shuffle = True
+    elif mode == 'test':
+        shuffle = False
+        grv_only = True
+
+    if args.dataset == 'ronin':
+        seq_type = GlobSpeedSequence
+    elif args.dataset == 'ridi':
+        seq_type = RIDIGlobSpeedSequence
+    elif args.dataset == 'oxiod':
+        seq_type = OXIODSequence
+    elif args.dataset == 'imunet':
+        seq_type = ProposedSequence
+    elif args.dataset == 'kiod':
+        seq_type = ProposedSequence
+    elif args.dataset == 'inaiod':
+        seq_type = ProposedSequence
+
+    dataset = StridedSequenceDataset(
+        seq_type, root_dir, data_list, args.cache_path, args.step_size, args.window_size,
+        random_shift=random_shift, transform=transforms,
+        shuffle=shuffle, grv_only=grv_only, max_ori_error=args.max_ori_error)
+
+    global _input_channel, _output_channel
+    _input_channel, _output_channel = dataset.feature_dim, dataset.target_dim
+    return dataset
+
+
+def get_dataset_from_list(root_dir, list_path, args, mode, **kwargs):
+    if args.dataset == 'oxiod':
+        if (mode == 'train'):
+            root_dir = root_dir + '/train'
+            data_list = os.listdir(root_dir)
+        else:
+            root_dir = root_dir + '/validation'
+            data_list = os.listdir(root_dir)
+    else:
+        with open(list_path) as f:
+            data_list = [s.strip().split(',' or ' ')[0] for s in f.readlines() if len(s) > 0 and s[0] != '#']
+
+    return get_dataset(root_dir, data_list, args, **kwargs)
+
+
+# Train function with differential loss as validation
+def train(args, **kwargs):
+    import os
+    import os.path as osp
+    import numpy as np
+    import torch
+    from torch.utils.data import DataLoader
+    from torch.utils.tensorboard import SummaryWriter
+
+    start_t = time.time()
+    print(args.root_dir)
+    train_dataset = get_dataset_from_list(args.root_dir, args.train_list, args, mode='train')
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
+
+    end_t = time.time()
+    print(f'Training set loaded. Feature size: {train_dataset.feature_dim}, target size: {train_dataset.target_dim}. Time usage: {end_t - start_t:.3f}s')
+    
+    val_dataset = None
+    if args.val_list is not None:
+        val_dataset = get_dataset_from_list(args.root_dir, args.val_list, args, mode='val')
+        val_loader = DataLoader(val_dataset, batch_size=512, shuffle=False)  # Changed shuffle to False for validation
+
+    device = torch.device('cuda:0' if torch.cuda.is_available() and not args.cpu else 'cpu')
+
+    if args.out_dir is not None:
+        os.makedirs(args.out_dir, exist_ok=True)
+        os.makedirs(osp.join(args.out_dir, 'checkpoints'), exist_ok=True)
+        os.makedirs(osp.join(args.out_dir, 'logs'), exist_ok=True)
+
+    network = get_model(args).to(device)
+    print(network)
+    print(f'Number of train samples: {len(train_dataset)}')
+    if val_dataset:
+        print(f'Number of val samples: {len(val_dataset)}')
+
+
+    print(network.get_num_params())
+    
+    criterion = torch.nn.MSELoss()
+    optimizer = torch.optim.Adam(network.parameters(), args.lr)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.1, patience=10, verbose=True, eps=1e-12)
+
+    start_epoch = 0
+    if args.continue_from is not None and osp.exists(args.continue_from):
+        checkpoints = torch.load(args.continue_from)
+        start_epoch = checkpoints.get('epoch', 0)
+        network.load_state_dict(checkpoints['model_state_dict'])
+        optimizer.load_state_dict(checkpoints['optimizer_state_dict'])
+
+    summary_writer = SummaryWriter(osp.join(args.out_dir, 'logs')) if args.out_dir else None
+
+    step = 0
+    best_val_metric = np.inf
+    train_losses_all, val_losses_all, diff_losses_all = [], [], []
+
+    best_avg_diff_loss = np.inf  # Track the best differential loss for validation
+
+    for epoch in range(start_epoch, args.epochs):
+        start_t = time.time()
+        network.train()
+        train_outs, train_targets = [], []
+        for batch_id, (feat, targ, _, _) in enumerate(train_loader):
+            feat, targ = feat.to(device), targ.to(device)
+            optimizer.zero_grad()
+            pred = network(feat)
+            
+            loss = criterion(pred, targ)
+            diff = torch.abs(pred - targ)  # Absolute differences for differential loss
+            mean_diff = torch.mean(diff)  # Mean of absolute differences
+
+            # Combining MSE and differential loss for backpropagation
+            total_loss = loss + mean_diff  # Could introduce a weighting factor here
+            
+            total_loss.backward()
+            optimizer.step()
+            
+            train_outs.append(pred.cpu().detach().numpy())
+            train_targets.append(targ.cpu().detach().numpy())
+            step += 1
+
+        train_outs = np.concatenate(train_outs, axis=0)
+        train_targets = np.concatenate(train_targets, axis=0)
+        train_losses = np.mean((train_outs - train_targets) ** 2, axis=0)
+        mean_diff_losses = np.mean(np.abs(train_outs - train_targets), axis=0)
+        train_losses_all.append(np.mean(train_losses))
+        diff_losses_all.append(np.mean(mean_diff_losses))
+
+        # Printing losses for the current epoch
+        print(f'Epoch {epoch}, Train Loss: {np.mean(train_losses):.6f}, Differential Loss: {np.mean(mean_diff_losses):.6f}')
+
+        if summary_writer:
+            summary_writer.add_scalar('Loss/train', np.mean(train_losses), epoch)
+            summary_writer.add_scalar('Diff/train', np.mean(mean_diff_losses), epoch)
+        
+        # Validation phase
+        if val_loader:
+            network.eval()
+            val_outs, val_targets = [], []
+            for _, batch in enumerate(val_loader):
+                if len(batch) == 2:
+                    feat, targ = batch
+                elif len(batch) > 2:
+                    feat, targ = batch[0], batch[1]  # assuming the first two are features and targets
+                else:
+                    continue  # skip batches that do not match expected format
+                
+                feat, targ = feat.to(device), targ.to(device)
+                pred = network(feat)
+                val_outs.append(pred.cpu().detach().numpy())
+                val_targets.append(targ.cpu().detach().numpy())
+
+            val_outs = np.concatenate(val_outs, axis=0)
+            val_targets = np.concatenate(val_targets, axis=0)
+            val_losses = np.mean((val_outs - val_targets) ** 2, axis=0)
+            diff_losses = np.mean(np.abs(val_outs - val_targets), axis=0)
+            val_losses_all.append(np.mean(val_losses))
+            diff_losses_all.append(np.mean(diff_losses))
+            print(f'Epoch {epoch}, Validation Loss: {np.mean(val_losses):.6f}, Differential Loss: {np.mean(diff_losses):.6f}')
+            
+            scheduler.step(np.mean(val_losses))  # Adjust LR based on validation MSE loss
+
+            if np.mean(diff_losses) < best_avg_diff_loss:
+                best_avg_diff_loss = np.mean(diff_losses)
+                model_path = osp.join(args.out_dir, 'checkpoints', 'checkpoint_best.pt')
+                torch.save({'model_state_dict': network.state_dict(), 'epoch': epoch, 'optimizer_state_dict': optimizer.state_dict()}, model_path)
+                print(f'New best model saved based on differential loss to {model_path}')
+
+    # Final saving of model, metrics, etc.
+    print('Training complete')
+    final_model_path = osp.join(args.out_dir, 'checkpoints', 'checkpoint_latest.pt')
+    torch.save({'model_state_dict': network.state_dict(), 'epoch': epoch, 'optimizer_state_dict': optimizer.state_dict()}, final_model_path)
+    print(f'Checkpoint saved to {final_model_path}')
+
+    return train_losses_all, val_losses_all, diff_losses_all
+
+
+def recon_traj_with_preds(dataset, preds, seq_id=0, **kwargs):
+    """
+    Reconstruct trajectory with predicted global velocities.
+    """
+    ts = dataset.ts[seq_id]
+    #ind = np.array([i[1] for i in dataset.index_map if i[0] == seq_id], dtype=np.int)
+    ind = np.array([i[1] for i in dataset.index_map if i[0] == seq_id], dtype=int)
+    dts = np.mean(ts[ind[1:]] - ts[ind[:-1]])
+    pos = np.zeros([preds.shape[0] + 2, 2])
+    pos[0] = dataset.gt_pos[seq_id][0, :2]
+    pos[1:-1] = np.cumsum(preds[:, :2] * dts, axis=0) + pos[0]
+    pos[-1] = pos[-2]
+    ts_ext = np.concatenate([[ts[0] - 1e-06], ts[ind], [ts[-1] + 1e-06]], axis=0)
+    pos = interp1d(ts_ext, pos, axis=0)(ts)
+    return pos
+
+
+def test_sequence(args):
+    if args.dataset != 'px4' and args.dataset != 'oxiod':
+        if args.test_path is not None:
+            if args.test_path[-1] == '/':
+                args.test_path = args.test_path[:-1]
+            root_dir = osp.split(args.test_path)[0]
+            test_data_list = [osp.split(args.test_path)[1]]
+        elif args.test_list is not None:
+            root_dir = args.root_dir
+            with open(args.test_list) as f:
+                test_data_list = [s.strip().split(',' or ' ')[0] for s in f.readlines() if len(s) > 0 and s[0] != '#']
+        else:
+            raise ValueError('Either test_path or test_list must be specified.')
+    else:
+        root_dir = args.root_dir + '/validation'
+        test_data_list = os.listdir(root_dir)
+        if args.dataset == 'px4':
+            args.step_size = 1
+    if args.out_dir is not None and not osp.isdir(args.out_dir):
+        os.makedirs(args.out_dir)
+
+    device = torch.device('cpu')
+    checkpoint = torch.load(args.model_path, map_location=lambda storage, location: storage)
+
+    _ = get_dataset(root_dir, [test_data_list[0]], args)
+    global _fc_config
+    _fc_config['in_dim'] = args.window_size // 32 + 1
+
+    network = get_model(args)
+    network.load_state_dict(checkpoint['model_state_dict'])
+    network.eval().to(device)
+    print('Model {} loaded to device {}.'.format(args.model_path, device))
+
+    preds_seq, targets_seq, losses_seq, ate_all, rte_all, d_drift_all = [], [], [], [], [], []
+    traj_lens = []
+
+    pred_per_min = 200 * 60
+    start_time = time.time()
+
+    for data in test_data_list:
+        sequence_start_time = time.time()
+        seq_dataset = get_dataset(root_dir, [data], args, mode='test')
+        seq_loader = DataLoader(seq_dataset, batch_size=1024, shuffle=False)
+        ind = np.array([i[1] for i in seq_dataset.index_map if i[0] == 0], dtype=int)
+
+        targets, preds = run_test(network, seq_loader, device, True)
+        losses = np.mean((targets - preds) ** 2, axis=0)
+        preds_seq.append(preds)
+        targets_seq.append(targets)
+        losses_seq.append(losses)
+
+        sequence_end_time = time.time()
+        print(f"Inference time for sequence {data}: {sequence_end_time - sequence_start_time} seconds")
+
+        if args.dataset != 'px4':
+            pos_pred = recon_traj_with_preds(seq_dataset, preds)[:, :2]
+            pos_gt = seq_dataset.gt_pos[0][:, :2]
+
+            traj_lens.append(np.sum(np.linalg.norm(pos_gt[1:] - pos_gt[:-1], axis=1)))
+            ate, rte = compute_ate_rte(pos_pred, pos_gt, pred_per_min)
+            d_drift = compute_drift(pos_pred, pos_gt)  # Calculate D_drift
+            ate_all.append(ate)
+            rte_all.append(rte)
+            d_drift_all.append(d_drift)  # Append D_drift value
+
+            pos_cum_error = np.linalg.norm(pos_pred - pos_gt, axis=1)
+            print('Sequence {}, loss {} / {}, ate {:.6f}, rte {:.6f}, d_drift {:.2f}%'.format(data, losses, np.mean(losses), ate, rte, d_drift))
+
+            # Plot figures as in the original function
+            kp = preds.shape[1]
+            if kp == 2:
+                targ_names = ['vx', 'vy']
+            elif kp == 3:
+                targ_names = ['vx', 'vy', 'vz']
+
+            plt.figure('{}'.format(data), figsize=(16, 9))
+            plt.subplot2grid((kp, 2), (0, 0), rowspan=kp - 1)
+            plt.plot(pos_pred[:, 0], pos_pred[:, 1])
+            plt.plot(pos_gt[:, 0], pos_gt[:, 1])
+            plt.title(data)
+            plt.axis('equal')
+            plt.legend(['Predicted', 'Ground truth'])
+            plt.subplot2grid((kp, 2), (kp - 1, 0))
+            plt.plot(pos_cum_error)
+            plt.legend(['ATE:{:.3f}, RTE:{:.3f}'.format(ate_all[-1], rte_all[-1])])
+            for i in range(kp):
+                plt.subplot2grid((kp, 2), (i, 1))
+                plt.plot(ind, preds[:, i])
+                plt.plot(ind, targets[:, i])
+                plt.legend(['Predicted', 'Ground truth'])
+                plt.title('{}, error: {:.6f}'.format(targ_names[i], losses[i]))
+            plt.tight_layout()
+
+            if args.show_plot:
+                plt.show()
+
+            if args.out_dir is not None and osp.isdir(args.out_dir):
+                np.save(osp.join(args.out_dir, data + '_gsn.npy'),
+                        np.concatenate([pos_pred[:, :2], pos_gt[:, :2]], axis=1))
+                plt.savefig(osp.join(args.out_dir, data + '_gsn.png'))
+
+            plt.close('all')
+
+    losses_seq = np.stack(losses_seq, axis=0)
+    losses_avg = np.mean(losses_seq, axis=1)
+
+    end_time = time.time()
+    print(f"Total inference time for the test sequence: {end_time - start_time} seconds")
+
+    if args.dataset != 'px4':
+        if args.out_dir is not None and osp.isdir(args.out_dir):
+            with open(osp.join(args.out_dir, 'losses.csv'), 'w') as f:
+                if losses_seq.shape[1] == 2:
+                    f.write('seq,vx,vy,avg,ate,rte,d_drift\n')
+                else:
+                    f.write('seq,vx,vy,vz,avg,ate,rte,d_drift\n')
+                for i in range(losses_seq.shape[0]):
+                    f.write('{},'.format(test_data_list[i]))
+                    for j in range(losses_seq.shape[1]):
+                        f.write('{:.6f},'.format(losses_seq[i][j]))
+                    f.write('{:.6f},{:.6f},{:.6f},{:.2f}\n'.format(losses_avg[i], ate_all[i], rte_all[i], d_drift_all[i]))
+
+        print('----------\nOverall loss: {}/{}, avg ATE:{}, avg RTE:{}, avg D_drift:{}%'.format(
+            np.average(losses_seq, axis=0), np.average(losses_avg), np.mean(ate_all), np.mean(rte_all), np.mean(d_drift_all)))
+
+    return losses_avg
+
+
+# Test sequences code for validating the throughput
+"""
+def test_sequence(args):
+    # Device setup
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    # Load model checkpoint
+    checkpoint = torch.load(args.model_path, map_location=device)
+    network = get_model(args)
+    network.load_state_dict(checkpoint['model_state_dict'])
+    network.eval().to(device)
+    print(f"Model {args.model_path} loaded on {device}.")
+
+    # Root directory and test data list setup
+    if args.dataset not in ['px4', 'oxiod']:
+        if args.test_path is not None:
+            root_dir = osp.split(args.test_path)[0]
+            test_data_list = [osp.split(args.test_path)[1]]
+        elif args.test_list is not None:
+            root_dir = args.root_dir
+            with open(args.test_list) as f:
+                test_data_list = [line.strip().split(',')[0] for line in f.readlines() if line.strip() and not line.startswith('#')]
+        else:
+            raise ValueError('Either test_path or test_list must be specified.')
+    else:
+        root_dir = osp.join(args.root_dir, 'validation')
+        test_data_list = os.listdir(root_dir)
+        if args.dataset == 'px4':
+            args.step_size = 1
+
+    if args.out_dir and not osp.isdir(args.out_dir):
+        os.makedirs(args.out_dir)
+
+    preds_seq, targets_seq, losses_seq = [], [], []
+    ate_all, rte_all, d_drift_all = [], [], []
+    traj_lens = []
+
+    total_samples, total_time = 0, 0.0  # For throughput calculation
+
+    # Testing loop
+    for data in test_data_list:
+        print(f"Processing sequence: {data}")
+        sequence_start_time = time.time()
+
+        # Dataset and DataLoader setup
+        seq_dataset = get_dataset(root_dir, [data], args, mode='test')
+        seq_loader = DataLoader(seq_dataset, batch_size=1024, shuffle=False)
+        ind = np.array([i[1] for i in seq_dataset.index_map if i[0] == 0], dtype=int)
+
+        targets, preds = [], []
+        start_time = time.time()
+        
+        # Model inference
+        for batch in seq_loader:
+            # Handle datasets with more than two outputs per batch
+            inputs, labels = batch[:2]  # Extract inputs and labels
+            inputs, labels = inputs.to(device), labels.to(device)
+            with torch.no_grad():
+                outputs = network(inputs)
+            preds.append(outputs.cpu().numpy())
+            targets.append(labels.cpu().numpy())
+
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        total_time += elapsed_time
+        total_samples += len(seq_dataset)
+
+        # Post-processing predictions
+        preds = np.concatenate(preds, axis=0)
+        targets = np.concatenate(targets, axis=0)
+        losses = np.mean((targets - preds) ** 2, axis=0)
+
+        preds_seq.append(preds)
+        targets_seq.append(targets)
+        losses_seq.append(losses)
+
+        sequence_end_time = time.time()
+        print(f"Inference time for sequence {data}: {sequence_end_time - sequence_start_time:.2f} seconds")
+
+        # If additional metrics are required
+        if args.dataset != 'px4':
+            pos_pred = recon_traj_with_preds(seq_dataset, preds)[:, :2]
+            pos_gt = seq_dataset.gt_pos[0][:, :2]
+
+            traj_lens.append(np.sum(np.linalg.norm(pos_gt[1:] - pos_gt[:-1], axis=1)))
+            ate, rte = compute_ate_rte(pos_pred, pos_gt, pred_per_min=200 * 60)
+            d_drift = compute_drift(pos_pred, pos_gt)
+            ate_all.append(ate)
+            rte_all.append(rte)
+            d_drift_all.append(d_drift)
+
+            print(f"ATE: {ate:.6f}, RTE: {rte:.6f}, Drift: {d_drift:.2f}%")
+
+            # Optional plotting
+            if args.show_plot:
+                plt.figure(figsize=(16, 9))
+                plt.plot(pos_pred[:, 0], pos_pred[:, 1], label="Predicted")
+                plt.plot(pos_gt[:, 0], pos_gt[:, 1], label="Ground Truth")
+                plt.title(data)
+                plt.legend()
+                plt.show()
+
+    # Compute throughput
+    throughput = total_samples / total_time
+    print(f"Throughput: {throughput:.2f} samples/second")
+
+    # Final report
+    losses_seq = np.stack(losses_seq, axis=0)
+    losses_avg = np.mean(losses_seq, axis=1)
+    print(f"Overall average loss: {np.mean(losses_avg):.6f}")
+
+    if args.dataset != 'px4':
+        print(f"Average ATE: {np.mean(ate_all):.6f}, Average RTE: {np.mean(rte_all):.6f}, Average Drift: {np.mean(d_drift_all):.2f}%")
+
+    return losses_avg
+"""
+
+def write_config(args):
+    if args.out_dir:
+        with open(osp.join(args.out_dir, 'config.json'), 'w') as f:
+            json.dump(vars(args), f)
+
+
+# main function
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--train_list', default='', type=str)
+    parser.add_argument('--val_list', type=str, default='')
+    parser.add_argument('--test_list', type=str, default='')
+    parser.add_argument('--test_path', type=str, default=None)
+    parser.add_argument('--root_dir', type=str, default='', help='Path to data directory')
+    parser.add_argument('--cache_path', type=str, default=None, help='Path to cache folder to store processed data')
+    parser.add_argument('--dataset', type=str, default='oxiod',
+                        choices=['ronin', 'ridi', 'imunet', 'oxiod', 'kiod', 'inaiod'])
+    parser.add_argument('--max_ori_error', type=float, default=20.0)
+    parser.add_argument('--step_size', type=int, default=10)
+    parser.add_argument('--window_size', type=int, default=200)
+    parser.add_argument('--mode', type=str, default='test', choices=['train', 'test'])
+    parser.add_argument('--lr', type=float, default=1e-04)
+    parser.add_argument('--batch_size', type=int, default=128)
+    parser.add_argument('--epochs', type=int, default=200)
+    parser.add_argument('--arch', type=str, default='HResCSA',
+             choices=['MobileNet', 'MobileNetV2','MnasNet', 'EfficientNet', 'IMUNet', 'ResNet1D', 'HResCSA'])
+    parser.add_argument('--cpu', action='store_true')
+    parser.add_argument('--run_ekf', action='store_true')
+    parser.add_argument('--fast_test', action='store_true')
+    parser.add_argument('--show_plot', action='store_true')
+    parser.add_argument('--test_status', type=str, default='seen', choices=['seen', 'unseen'])
+    parser.add_argument('--continue_from', type=str, default=None)
+    parser.add_argument('--out_dir', type=str, default='')
+    parser.add_argument('--model_path', type=str, default='')
+
+    parser.add_argument('--feature_sigma', type=float, default=0.00001)
+    parser.add_argument('--target_sigma', type=float, default=0.00001)
+
+    args = parser.parse_args()
+
+    np.set_printoptions(formatter={'all': lambda x: '{:.6f}'.format(x)})
+    dataset = args.dataset
+    import os
+
+    # Get the current working directory
+    current_dir = os.getcwd()
+    
+    from pathlib import Path
+    path = Path(current_dir)
+    current_dir = str(path.parent.absolute())
+
+    # Print the current working directory
+    print("Current working directory: {0}".format(current_dir))
+
+    # Train
+    if args.mode == 'train':
+        if dataset == 'ronin':
+            args.train_list = current_dir +'/dataset/ronin/list_train.txt'
+            args.val_list = current_dir + '/dataset/ronin/list_val.txt'
+            args.root_dir = current_dir + '/dataset/ronin/train_dataset_1'
+            args.out_dir = current_dir + '/src/output/Train_out/' + args.arch + '/ronin'
+            
+        elif dataset == 'ridi':
+            args.train_list = current_dir + '/dataset/ridi/data_publish_v2/list_train_publish_v2.txt'
+            args.val_list = current_dir + '/dataset/ridi/data_publish_v2/list_test_publish_v2.txt'
+            args.root_dir = current_dir + '/dataset/ridi/data_publish_v2'
+            args.out_dir = current_dir + '/src/output/Train_out/' + args.arch + '/ridi'
+
+        # IMUNet dataset
+        elif dataset == 'imunet':
+            args.train_list = current_dir +'/dataset/imunet/list_train.txt'
+            args.val_list = current_dir +'/dataset/imunet/list_test.txt'
+            args.root_dir = current_dir + '/dataset/imunet'
+            args.out_dir = current_dir +'/src/output/Train_out/' + args.arch + '/imunet'
+
+            # added the functionality of KAIST-N1 dataset
+        elif dataset == 'kiod':
+            args.train_list = current_dir +'/dataset/KIOD/list_train.txt'
+            args.val_list = current_dir +'/dataset/KIOD/list_test.txt'
+            args.root_dir = current_dir + '/dataset/KIOD'
+            args.out_dir = current_dir +'/src/output/Train_out/' + args.arch + '/KIOD'
+        
+        # INA-IOD dataset
+        elif dataset == 'inaiod':
+            args.train_list = current_dir +'/dataset/INAIOD/list_train.txt'
+            args.val_list = current_dir +'/dataset/INAIOD/list_test.txt'
+            args.root_dir = current_dir + '/dataset/INAIOD'
+            args.out_dir = current_dir +'/src/output/Train_out/' + args.arch + '/INAIOD'
+
+        elif dataset == 'oxiod':
+            args.train_list = ''
+            args.val_list = ''
+            args.root_dir = current_dir + '/dataset/oxiod'
+            args.out_dir = current_dir +'/src/output/Train_out/' + args.arch + '/oxiod'
+        train(args)
+
+    # Test    
+    elif args.mode == 'test':
+        if args.test_status == 'unseen':
+            if dataset != 'ronin':
+                raise ValueError('Undefined mode')
+        if dataset == 'ronin':
+            args.model_path = current_dir + '/src/output/Train_out/' + args.arch + \
+                            '/ronin/checkpoints/checkpoint_best.pt'
+            
+            if args.test_status == 'seen':
+                args.root_dir =  current_dir + '/dataset/ronin/seen_subjects_test_set'
+                args.test_list = current_dir + '/dataset/ronin/list_test_seen.txt'
+                args.out_dir = current_dir + '/src/output/Test_out/ronin/seen/'  + args.arch
+            else:
+                args.root_dir = current_dir + '/dataset/ronin/unseen_subjects_test_set'
+                args.test_list = current_dir + '/dataset/ronin/list_test_unseen.txt'
+                args.out_dir = current_dir + '/src/output/Test_out/ronin/unseen/'  + args.arch
+
+        elif dataset == 'ridi':
+            args.model_path = current_dir + '/src/output/Train_out/' + args.arch + \
+                              '/ridi/checkpoints/checkpoint_best.pt'
+            args.test_list = current_dir + '/dataset/ridi/data_publish_v2/list_test_publish_v2.txt'
+            args.root_dir = current_dir + '/dataset/ridi/data_publish_v2'
+            args.out_dir = current_dir + '/src/output/Test_out/ridi/' + args.arch
+
+
+        #IMUNet dataset
+        elif dataset == 'imunet':
+            args.model_path = current_dir + '/src/output/Train_out/' + args.arch + '/imunet/checkpoints' \
+                                                                                    '/checkpoint_best.pt'           
+            args.root_dir = current_dir + '/dataset/imunet' 
+    
+            args.test_list = current_dir + '/dataset/imunet/list_test.txt'      
+            args.out_dir = current_dir + '/output/Test_out/imunet/seen/' + args.arch
+
+
+            # K-IOD dataset
+        elif dataset == 'kiod':
+            args.model_path = current_dir + '/src/output/Train_out/' + args.arch + '/KIOD/checkpoints' \
+                                                                                    '/checkpoint_best.pt'
+            args.test_list = current_dir + '/dataset/KIOD/list_test.txt'
+            args.root_dir = current_dir + '/dataset/KIOD'
+            args.out_dir = current_dir + '/src/output/Test_out/KIOD' + args.arch
+            
+
+        # INA-IOD dataset
+        elif dataset == 'inaiod':
+            args.model_path = current_dir + '/src/output/Train_out/' + args.arch + '/INAIOD/checkpoints' \
+                                                                                    '/checkpoint_best.pt'
+            args.test_list = current_dir + '/dataset/INAIOD/list_test.txt'
+            args.root_dir = current_dir + '/dataset/INAIOD'
+            args.out_dir = current_dir + '/src/output/Test_out/INAIOD' + args.arch
+
+
+        elif dataset == 'oxiod':
+            args.model_path =  current_dir + '/src/output/Train_out/' + args.arch + '/oxiod/checkpoints/checkpoint_latest.pt'
+            args.test_list = current_dir +  '/dataset/oxiod/'
+            args.root_dir = current_dir + '/dataset/oxiod'
+            args.out_dir = current_dir + '/src/output/Test_out/oxiod/' + args.arch
+        test_sequence(args)
+        #onnx_convertor()
+    else:
+        raise ValueError('Undefined mode')
+    
