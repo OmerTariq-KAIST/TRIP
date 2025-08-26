@@ -4,3 +4,4 @@ main_2.py
 *.pyc
 *.pyo
 *.pyd
+*.out
