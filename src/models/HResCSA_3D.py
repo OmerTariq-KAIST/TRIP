@@ -1,8 +1,5 @@
 """
-👨‍💻 Copyright (C) $2023 Omer Tariq KAIST. - All Rights Reserved
-
-Project: HRes-CSA
-
+Enhanced HResCSA model with support for both 2D and 3D trajectory prediction
 """
 
 import torch
@@ -47,7 +44,6 @@ class ChannelAttention(nn.Module):
         max_out = self.fc(self.max_pool(x))
         return self.sigmoid(avg_out + max_out)
 
-# modified BasicBlock with dilated convolutions and temporal attention
 class BasicBlock1D(nn.Module):
     expansion = 1
 
@@ -132,22 +128,11 @@ class Bottleneck1D(nn.Module):
 
         return out
 
-
 class MLPOutputModule(nn.Module):
     """
-    Multilayer Perceptron (MLP) output module with global average pooling.
+    Enhanced MLP output module supporting both 2D and 3D output
     """
     def __init__(self, in_planes, num_outputs, **kwargs):
-        """
-        Constructor for an MLP-based output module with global pooling.
-
-        Args:
-        in_planes: number of planes (channels) of the layer immediately preceding the output module.
-        num_outputs: number of output predictions.
-        mlp_dim: dimension of hidden MLP layers.
-        num_layers: number of layers in the MLP head.
-        dropout: dropout probability for MLP layers.
-        """
         super(MLPOutputModule, self).__init__()
         mlp_dim = kwargs.get('mlp_dim', 512)
         num_layers = kwargs.get('num_layers', 2)
@@ -166,15 +151,20 @@ class MLPOutputModule(nn.Module):
         else:
             self.transition = None
 
-        # MLP layers
+        # Adaptive MLP layers based on output dimension
         mlp_layers = []
         for i in range(num_layers - 1):
             mlp_layers.append(nn.Linear(in_planes if i == 0 else mlp_dim, mlp_dim))
             mlp_layers.append(nn.ReLU(True))
             mlp_layers.append(nn.Dropout(dropout))
+        
+        # Final output layer
         mlp_layers.append(nn.Linear(mlp_dim, num_outputs))
         
         self.mlp = nn.Sequential(*mlp_layers)
+        
+        # Store output dimension for reference
+        self.num_outputs = num_outputs
 
     def get_dropout(self):
         return [m for m in self.mlp if isinstance(m, nn.Dropout)]
@@ -186,32 +176,34 @@ class MLPOutputModule(nn.Module):
         x = x.view(x.size(0), -1)    # Flatten to (batch_size, channels)
         return self.mlp(x)            # Pass through the MLP layers
 
-
-
 class GlobAvgOutputModule(nn.Module):
     """
-    Global average output module.
+    Global average output module supporting configurable output dimensions
     """
     def __init__(self, in_planes, num_outputs):
         super(GlobAvgOutputModule, self).__init__()
         self.avg = nn.AdaptiveAvgPool1d(1)
         self.fc = nn.Linear(in_planes, num_outputs)
+        self.num_outputs = num_outputs
 
     def get_dropout(self):
         return []
 
     def forward(self, x):
-        x = self.avg()
+        x = self.avg(x)
         x = x.view(x.size(0), -1)
         return self.fc(x)
 
-""" ending the modules from deepils """
-
 class HResCSA(nn.Module):
-    def __init__(self, num_inputs, num_outputs, block_type, group_sizes, base_plane=64, output_block=None, zero_init_residual=False, **kwargs):
+    """
+    Enhanced HResCSA supporting both 2D and 3D trajectory prediction
+    """
+    def __init__(self, num_inputs, num_outputs, block_type, group_sizes, base_plane=64, 
+                 output_block=None, zero_init_residual=False, **kwargs):
         super(HResCSA, self).__init__()
         self.base_plane = base_plane
         self.inplanes = self.base_plane
+        self.num_outputs = num_outputs
 
         # Input module
         self.input_block = nn.Sequential(
@@ -230,13 +222,15 @@ class HResCSA(nn.Module):
                   for i in range(len(group_sizes))]
         self.residual_groups = nn.Sequential(*groups)
 
-        # Output module
+        # Output module with configurable dimensions
         if output_block is None:
             self.output_block = GlobAvgOutputModule(self.planes[-1] * block_type.expansion, num_outputs)
         else:
             self.output_block = output_block(self.planes[-1] * block_type.expansion, num_outputs, **kwargs)
 
         self._initialize(zero_init_residual)
+        
+        print(f"HResCSA initialized with {num_outputs}D output (num_outputs={num_outputs})")
 
     def _make_residual_group1d(self, block_type, planes, kernel_size, blocks, stride=1, dilation=1):
         downsample = None
@@ -279,26 +273,65 @@ class HResCSA(nn.Module):
         return sum(p.numel() for p in self.parameters() if p.requires_grad)
 
     def reset_output_block(self, block_type, num_outputs, **kwargs):
-
-        #self.output_block =  FCOutputModule(self.planes[-1] * block_type.expansion, num_outputs, **kwargs)
-        self.output_block =  MLPOutputModule(self.planes[-1] * block_type.expansion, num_outputs, **kwargs)
-
+        """
+        Reset output block for different output dimensions
+        """
+        self.output_block = MLPOutputModule(self.planes[-1] * block_type.expansion, num_outputs, **kwargs)
+        self.num_outputs = num_outputs
+        
         # Initialize the new output block
         self.output_block.apply(self._initialize)
-        print('final output block resetted')
+        print(f'Output block reset for {num_outputs}D prediction')
 
+# Factory function for easy model creation
+def create_hrescsa(num_inputs=6, num_outputs=2, **kwargs):
+    """
+    Factory function to create HResCSA model
+    
+    Args:
+        num_inputs: Number of input channels (default: 6 for IMU)
+        num_outputs: Number of output dimensions (2 for 2D, 3 for 3D)
+        **kwargs: Additional arguments for model configuration
+    """
+    mlp_config = kwargs.get('mlp_config', {
+        'mlp_dim': 512,
+        'num_layers': 2,
+        'dropout': 0.3,
+        'trans_planes': 128
+    })
+    
+    model = HResCSA(
+        num_inputs=num_inputs, 
+        num_outputs=num_outputs, 
+        block_type=BasicBlock1D, 
+        group_sizes=[2, 2, 2, 2], 
+        base_plane=64, 
+        output_block=MLPOutputModule, 
+        kernel_size=3, 
+        **mlp_config
+    )
+    
+    return model
 
 if __name__ == '__main__':
-    net = HResCSA()
-    print(net)
+    # Test both 2D and 3D models
+    print("Testing 2D model:")
+    net_2d = create_hrescsa(num_inputs=6, num_outputs=2)
     x_image = Variable(torch.randn(1, 6, 200))
-    y = net(x_image)
-    print(y)
-
-    inp = torch.rand(1,6, 200)
-    from pthflops import count_ops
+    y_2d = net_2d(x_image)
+    print(f"2D output shape: {y_2d.shape}")
+    print(f"2D model parameters: {net_2d.get_num_params()}")
     
-    # Count the number of FLOPs
-    count_ops(net, inp)
-    #print("No of Flops", net.get_num_params() )
-    #print(net.get_num_params())
+    print("\nTesting 3D model:")
+    net_3d = create_hrescsa(num_inputs=6, num_outputs=3)
+    y_3d = net_3d(x_image)
+    print(f"3D output shape: {y_3d.shape}")
+    print(f"3D model parameters: {net_3d.get_num_params()}")
+    
+    # Test FLOPs if available
+    try:
+        from pthflops import count_ops
+        print(f"\n2D Model FLOPs: {count_ops(net_2d, x_image)}")
+        print(f"3D Model FLOPs: {count_ops(net_3d, x_image)}")
+    except ImportError:
+        print("\npthflops not available for FLOP counting")

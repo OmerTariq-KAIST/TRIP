@@ -1,0 +1,2008 @@
+Current working directory: /home/pedxnav/Omer/TRIP
+/home/pedxnav/Omer/TRIP/data/TLIO
+Using TLIO's native dataloader...
+[2025-08-17 16:35:17,023] {tlio_data.py:90} WARNING - val_dataloader : data_window_config is partially ignored here for now! (past and future data should be 0 for now)
+Cumulated val dataset duration is 3.127 hours
+[2025-08-17 16:35:17,023] {sequences_dataset.py:144} INFO - Cumulated val dataset duration is 3.127 hours
+Number of val sequences is 35
+[2025-08-17 16:35:17,023] {sequences_dataset.py:147} INFO - Number of val sequences is 35
+Min/max sequences length=32299, 113166
+[2025-08-17 16:35:17,023] {sequences_dataset.py:154} INFO - Min/max sequences length=32299, 113166
+[2025-08-17 16:35:17,028] {tlio_data.py:129} INFO - val set loaded. Loading time: 0.005s
+[2025-08-17 16:35:17,028] {tlio_data.py:90} WARNING - train_dataloader : data_window_config is partially ignored here for now! (past and future data should be 0 for now)
+Cumulated train dataset duration is 25.301 hours
+[2025-08-17 16:35:17,030] {sequences_dataset.py:144} INFO - Cumulated train dataset duration is 25.301 hours
+Number of train sequences is 283
+[2025-08-17 16:35:17,031] {sequences_dataset.py:147} INFO - Number of train sequences is 283
+Min/max sequences length=16347, 144951
+[2025-08-17 16:35:17,031] {sequences_dataset.py:154} INFO - Min/max sequences length=16347, 144951
+[2025-08-17 16:35:17,125] {tlio_data.py:129} INFO - train set loaded. Loading time: 0.098s
+/home/pedxnav/anaconda3/envs/PT/lib/python3.12/site-packages/torch/utils/data/dataloader.py:665: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  warnings.warn(warn_msg)
+TLIO dataset loaded using native dataloader
+Dataset loaded. Feature size: 6, target size: 3. Time usage: 0.104s
+Number of train samples: 1818881
+Using n_class = 3 based on dataset target dimension
+Model created with output dimension: 3
+Model parameters: 4427715
+Starting epoch 1/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 0) - ETA: 0.0min
+Debug - First batch shapes after processing:
+  Input features: torch.Size([512, 6, 100])
+  Target: torch.Size([512, 3])
+  Expected input format for HResCSA: [batch_size, 6, sequence_length]
+  Model prediction: torch.Size([512, 3])
+  Shapes match: True
+  First batch took 0.34s
+  Estimated epoch time: 0.34 hours
+  Batch 100/3553 (Epoch 0) - ETA: 10.1min
+  Batch 200/3553 (Epoch 0) - ETA: 9.9min
+  Batch 300/3553 (Epoch 0) - ETA: 9.7min
+  Batch 400/3553 (Epoch 0) - ETA: 9.4min
+  Batch 500/3553 (Epoch 0) - ETA: 9.1min
+  Batch 600/3553 (Epoch 0) - ETA: 8.8min
+  Batch 700/3553 (Epoch 0) - ETA: 8.5min
+  Batch 800/3553 (Epoch 0) - ETA: 8.2min
+  Batch 900/3553 (Epoch 0) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 0) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 0) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 0) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 0) - ETA: 6.7min
+  Batch 1400/3553 (Epoch 0) - ETA: 6.4min
+  Batch 1500/3553 (Epoch 0) - ETA: 6.1min
+  Batch 1600/3553 (Epoch 0) - ETA: 5.8min
+  Batch 1700/3553 (Epoch 0) - ETA: 5.5min
+  Batch 1800/3553 (Epoch 0) - ETA: 5.2min
+  Batch 1900/3553 (Epoch 0) - ETA: 4.9min
+  Batch 2000/3553 (Epoch 0) - ETA: 4.6min
+  Batch 2100/3553 (Epoch 0) - ETA: 4.3min
+  Batch 2200/3553 (Epoch 0) - ETA: 4.0min
+  Batch 2300/3553 (Epoch 0) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 0) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 0) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 0) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 0) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 0) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 0) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 0) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 0) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 0) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 0) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 0) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 0) - ETA: 0.2min
+Epoch 0, Train Loss: 0.009059, Differential Loss: 0.041500
+Starting epoch 2/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 1) - ETA: 0.0min
+  First batch took 0.26s
+  Estimated epoch time: 0.26 hours
+  Batch 100/3553 (Epoch 1) - ETA: 10.5min
+  Batch 200/3553 (Epoch 1) - ETA: 10.2min
+  Batch 300/3553 (Epoch 1) - ETA: 9.9min
+  Batch 400/3553 (Epoch 1) - ETA: 9.6min
+  Batch 500/3553 (Epoch 1) - ETA: 9.4min
+  Batch 600/3553 (Epoch 1) - ETA: 9.0min
+  Batch 700/3553 (Epoch 1) - ETA: 8.7min
+  Batch 800/3553 (Epoch 1) - ETA: 8.4min
+  Batch 900/3553 (Epoch 1) - ETA: 8.2min
+  Batch 1000/3553 (Epoch 1) - ETA: 7.9min
+  Batch 1100/3553 (Epoch 1) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 1) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 1) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 1) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 1) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 1) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 1) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 1) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 1) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 1) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 1) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 1) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 1) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 1) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 1) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 1) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 1) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 1) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 1) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 1) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 1) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 1) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 1) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 1) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 1) - ETA: 0.2min
+Epoch 1, Train Loss: 0.005216, Differential Loss: 0.031548
+Starting epoch 3/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 2) - ETA: 0.0min
+  First batch took 0.27s
+  Estimated epoch time: 0.26 hours
+  Batch 100/3553 (Epoch 2) - ETA: 10.5min
+  Batch 200/3553 (Epoch 2) - ETA: 10.3min
+  Batch 300/3553 (Epoch 2) - ETA: 10.1min
+  Batch 400/3553 (Epoch 2) - ETA: 9.7min
+  Batch 500/3553 (Epoch 2) - ETA: 9.3min
+  Batch 600/3553 (Epoch 2) - ETA: 9.0min
+  Batch 700/3553 (Epoch 2) - ETA: 8.7min
+  Batch 800/3553 (Epoch 2) - ETA: 8.4min
+  Batch 900/3553 (Epoch 2) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 2) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 2) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 2) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 2) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 2) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 2) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 2) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 2) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 2) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 2) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 2) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 2) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 2) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 2) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 2) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 2) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 2) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 2) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 2) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 2) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 2) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 2) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 2) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 2) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 2) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 2) - ETA: 0.2min
+Epoch 2, Train Loss: 0.003831, Differential Loss: 0.027970
+Starting epoch 4/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 3) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.25 hours
+  Batch 100/3553 (Epoch 3) - ETA: 10.5min
+  Batch 200/3553 (Epoch 3) - ETA: 10.3min
+  Batch 300/3553 (Epoch 3) - ETA: 10.0min
+  Batch 400/3553 (Epoch 3) - ETA: 9.6min
+  Batch 500/3553 (Epoch 3) - ETA: 9.3min
+  Batch 600/3553 (Epoch 3) - ETA: 9.0min
+  Batch 700/3553 (Epoch 3) - ETA: 8.7min
+  Batch 800/3553 (Epoch 3) - ETA: 8.4min
+  Batch 900/3553 (Epoch 3) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 3) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 3) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 3) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 3) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 3) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 3) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 3) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 3) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 3) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 3) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 3) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 3) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 3) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 3) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 3) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 3) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 3) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 3) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 3) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 3) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 3) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 3) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 3) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 3) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 3) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 3) - ETA: 0.2min
+Epoch 3, Train Loss: 0.003132, Differential Loss: 0.025951
+Starting epoch 5/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 4) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 4) - ETA: 10.7min
+  Batch 200/3553 (Epoch 4) - ETA: 10.3min
+  Batch 300/3553 (Epoch 4) - ETA: 9.8min
+  Batch 400/3553 (Epoch 4) - ETA: 9.6min
+  Batch 500/3553 (Epoch 4) - ETA: 9.2min
+  Batch 600/3553 (Epoch 4) - ETA: 8.9min
+  Batch 700/3553 (Epoch 4) - ETA: 8.6min
+  Batch 800/3553 (Epoch 4) - ETA: 8.3min
+  Batch 900/3553 (Epoch 4) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 4) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 4) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 4) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 4) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 4) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 4) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 4) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 4) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 4) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 4) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 4) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 4) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 4) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 4) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 4) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 4) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 4) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 4) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 4) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 4) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 4) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 4) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 4) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 4) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 4) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 4) - ETA: 0.2min
+Epoch 4, Train Loss: 0.002684, Differential Loss: 0.024516
+Starting epoch 6/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 5) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 5) - ETA: 10.3min
+  Batch 200/3553 (Epoch 5) - ETA: 9.9min
+  Batch 300/3553 (Epoch 5) - ETA: 9.7min
+  Batch 400/3553 (Epoch 5) - ETA: 9.5min
+  Batch 500/3553 (Epoch 5) - ETA: 9.2min
+  Batch 600/3553 (Epoch 5) - ETA: 8.9min
+  Batch 700/3553 (Epoch 5) - ETA: 8.6min
+  Batch 800/3553 (Epoch 5) - ETA: 8.3min
+  Batch 900/3553 (Epoch 5) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 5) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 5) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 5) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 5) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 5) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 5) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 5) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 5) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 5) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 5) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 5) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 5) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 5) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 5) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 5) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 5) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 5) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 5) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 5) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 5) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 5) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 5) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 5) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 5) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 5) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 5) - ETA: 0.2min
+Epoch 5, Train Loss: 0.002361, Differential Loss: 0.023431
+Starting epoch 7/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 6) - ETA: 0.0min
+  First batch took 0.26s
+  Estimated epoch time: 0.25 hours
+  Batch 100/3553 (Epoch 6) - ETA: 10.5min
+  Batch 200/3553 (Epoch 6) - ETA: 10.2min
+  Batch 300/3553 (Epoch 6) - ETA: 9.9min
+  Batch 400/3553 (Epoch 6) - ETA: 9.6min
+  Batch 500/3553 (Epoch 6) - ETA: 9.3min
+  Batch 600/3553 (Epoch 6) - ETA: 9.0min
+  Batch 700/3553 (Epoch 6) - ETA: 8.7min
+  Batch 800/3553 (Epoch 6) - ETA: 8.4min
+  Batch 900/3553 (Epoch 6) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 6) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 6) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 6) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 6) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 6) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 6) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 6) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 6) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 6) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 6) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 6) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 6) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 6) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 6) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 6) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 6) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 6) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 6) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 6) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 6) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 6) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 6) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 6) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 6) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 6) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 6) - ETA: 0.2min
+Epoch 6, Train Loss: 0.002146, Differential Loss: 0.022541
+Starting epoch 8/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 7) - ETA: 0.0min
+  First batch took 0.26s
+  Estimated epoch time: 0.25 hours
+  Batch 100/3553 (Epoch 7) - ETA: 10.7min
+  Batch 200/3553 (Epoch 7) - ETA: 10.3min
+  Batch 300/3553 (Epoch 7) - ETA: 9.9min
+  Batch 400/3553 (Epoch 7) - ETA: 9.5min
+  Batch 500/3553 (Epoch 7) - ETA: 9.2min
+  Batch 600/3553 (Epoch 7) - ETA: 8.9min
+  Batch 700/3553 (Epoch 7) - ETA: 8.6min
+  Batch 800/3553 (Epoch 7) - ETA: 8.3min
+  Batch 900/3553 (Epoch 7) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 7) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 7) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 7) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 7) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 7) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 7) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 7) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 7) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 7) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 7) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 7) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 7) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 7) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 7) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 7) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 7) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 7) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 7) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 7) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 7) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 7) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 7) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 7) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 7) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 7) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 7) - ETA: 0.2min
+Epoch 7, Train Loss: 0.001959, Differential Loss: 0.021772
+Starting epoch 9/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 8) - ETA: 0.0min
+  First batch took 0.26s
+  Estimated epoch time: 0.26 hours
+  Batch 100/3553 (Epoch 8) - ETA: 10.6min
+  Batch 200/3553 (Epoch 8) - ETA: 10.4min
+  Batch 300/3553 (Epoch 8) - ETA: 10.1min
+  Batch 400/3553 (Epoch 8) - ETA: 9.8min
+  Batch 500/3553 (Epoch 8) - ETA: 9.5min
+  Batch 600/3553 (Epoch 8) - ETA: 9.2min
+  Batch 700/3553 (Epoch 8) - ETA: 8.8min
+  Batch 800/3553 (Epoch 8) - ETA: 8.5min
+  Batch 900/3553 (Epoch 8) - ETA: 8.2min
+  Batch 1000/3553 (Epoch 8) - ETA: 7.9min
+  Batch 1100/3553 (Epoch 8) - ETA: 7.6min
+  Batch 1200/3553 (Epoch 8) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 8) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 8) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 8) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 8) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 8) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 8) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 8) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 8) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 8) - ETA: 4.5min
+  Batch 2200/3553 (Epoch 8) - ETA: 4.2min
+  Batch 2300/3553 (Epoch 8) - ETA: 3.9min
+  Batch 2400/3553 (Epoch 8) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 8) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 8) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 8) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 8) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 8) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 8) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 8) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 8) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 8) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 8) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 8) - ETA: 0.2min
+Epoch 8, Train Loss: 0.001800, Differential Loss: 0.021090
+Starting epoch 10/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 9) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.22 hours
+  Batch 100/3553 (Epoch 9) - ETA: 10.3min
+  Batch 200/3553 (Epoch 9) - ETA: 10.0min
+  Batch 300/3553 (Epoch 9) - ETA: 9.7min
+  Batch 400/3553 (Epoch 9) - ETA: 9.5min
+  Batch 500/3553 (Epoch 9) - ETA: 9.2min
+  Batch 600/3553 (Epoch 9) - ETA: 8.8min
+  Batch 700/3553 (Epoch 9) - ETA: 8.5min
+  Batch 800/3553 (Epoch 9) - ETA: 8.2min
+  Batch 900/3553 (Epoch 9) - ETA: 7.9min
+  Batch 1000/3553 (Epoch 9) - ETA: 7.6min
+  Batch 1100/3553 (Epoch 9) - ETA: 7.3min
+  Batch 1200/3553 (Epoch 9) - ETA: 7.0min
+  Batch 1300/3553 (Epoch 9) - ETA: 6.7min
+  Batch 1400/3553 (Epoch 9) - ETA: 6.4min
+  Batch 1500/3553 (Epoch 9) - ETA: 6.1min
+  Batch 1600/3553 (Epoch 9) - ETA: 5.8min
+  Batch 1700/3553 (Epoch 9) - ETA: 5.5min
+  Batch 1800/3553 (Epoch 9) - ETA: 5.2min
+  Batch 1900/3553 (Epoch 9) - ETA: 4.9min
+  Batch 2000/3553 (Epoch 9) - ETA: 4.6min
+  Batch 2100/3553 (Epoch 9) - ETA: 4.3min
+  Batch 2200/3553 (Epoch 9) - ETA: 4.0min
+  Batch 2300/3553 (Epoch 9) - ETA: 3.7min
+  Batch 2400/3553 (Epoch 9) - ETA: 3.4min
+  Batch 2500/3553 (Epoch 9) - ETA: 3.1min
+  Batch 2600/3553 (Epoch 9) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 9) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 9) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 9) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 9) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 9) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 9) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 9) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 9) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 9) - ETA: 0.2min
+Epoch 9, Train Loss: 0.001682, Differential Loss: 0.020504
+Starting epoch 11/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 10) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 10) - ETA: 10.3min
+  Batch 200/3553 (Epoch 10) - ETA: 10.0min
+  Batch 300/3553 (Epoch 10) - ETA: 9.8min
+  Batch 400/3553 (Epoch 10) - ETA: 9.5min
+  Batch 500/3553 (Epoch 10) - ETA: 9.2min
+  Batch 600/3553 (Epoch 10) - ETA: 8.9min
+  Batch 700/3553 (Epoch 10) - ETA: 8.6min
+  Batch 800/3553 (Epoch 10) - ETA: 8.3min
+  Batch 900/3553 (Epoch 10) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 10) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 10) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 10) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 10) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 10) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 10) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 10) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 10) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 10) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 10) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 10) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 10) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 10) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 10) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 10) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 10) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 10) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 10) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 10) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 10) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 10) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 10) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 10) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 10) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 10) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 10) - ETA: 0.2min
+Epoch 10, Train Loss: 0.001560, Differential Loss: 0.019928
+Starting epoch 12/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 11) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.25 hours
+  Batch 100/3553 (Epoch 11) - ETA: 10.4min
+  Batch 200/3553 (Epoch 11) - ETA: 10.1min
+  Batch 300/3553 (Epoch 11) - ETA: 9.7min
+  Batch 400/3553 (Epoch 11) - ETA: 9.5min
+  Batch 500/3553 (Epoch 11) - ETA: 9.3min
+  Batch 600/3553 (Epoch 11) - ETA: 9.0min
+  Batch 700/3553 (Epoch 11) - ETA: 8.7min
+  Batch 800/3553 (Epoch 11) - ETA: 8.4min
+  Batch 900/3553 (Epoch 11) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 11) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 11) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 11) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 11) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 11) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 11) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 11) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 11) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 11) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 11) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 11) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 11) - ETA: 4.5min
+  Batch 2200/3553 (Epoch 11) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 11) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 11) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 11) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 11) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 11) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 11) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 11) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 11) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 11) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 11) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 11) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 11) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 11) - ETA: 0.2min
+Epoch 11, Train Loss: 0.001489, Differential Loss: 0.019489
+Starting epoch 13/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 12) - ETA: 0.0min
+  First batch took 0.26s
+  Estimated epoch time: 0.26 hours
+  Batch 100/3553 (Epoch 12) - ETA: 10.4min
+  Batch 200/3553 (Epoch 12) - ETA: 10.2min
+  Batch 300/3553 (Epoch 12) - ETA: 9.8min
+  Batch 400/3553 (Epoch 12) - ETA: 9.7min
+  Batch 500/3553 (Epoch 12) - ETA: 9.4min
+  Batch 600/3553 (Epoch 12) - ETA: 9.1min
+  Batch 700/3553 (Epoch 12) - ETA: 8.7min
+  Batch 800/3553 (Epoch 12) - ETA: 8.4min
+  Batch 900/3553 (Epoch 12) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 12) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 12) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 12) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 12) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 12) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 12) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 12) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 12) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 12) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 12) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 12) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 12) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 12) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 12) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 12) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 12) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 12) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 12) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 12) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 12) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 12) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 12) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 12) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 12) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 12) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 12) - ETA: 0.2min
+Epoch 12, Train Loss: 0.001385, Differential Loss: 0.018993
+Starting epoch 14/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 13) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 13) - ETA: 10.4min
+  Batch 200/3553 (Epoch 13) - ETA: 10.2min
+  Batch 300/3553 (Epoch 13) - ETA: 10.0min
+  Batch 400/3553 (Epoch 13) - ETA: 9.7min
+  Batch 500/3553 (Epoch 13) - ETA: 9.4min
+  Batch 600/3553 (Epoch 13) - ETA: 9.2min
+  Batch 700/3553 (Epoch 13) - ETA: 8.8min
+  Batch 800/3553 (Epoch 13) - ETA: 8.5min
+  Batch 900/3553 (Epoch 13) - ETA: 8.2min
+  Batch 1000/3553 (Epoch 13) - ETA: 7.9min
+  Batch 1100/3553 (Epoch 13) - ETA: 7.6min
+  Batch 1200/3553 (Epoch 13) - ETA: 7.3min
+  Batch 1300/3553 (Epoch 13) - ETA: 7.0min
+  Batch 1400/3553 (Epoch 13) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 13) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 13) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 13) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 13) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 13) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 13) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 13) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 13) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 13) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 13) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 13) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 13) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 13) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 13) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 13) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 13) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 13) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 13) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 13) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 13) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 13) - ETA: 0.2min
+Epoch 13, Train Loss: 0.001309, Differential Loss: 0.018586
+Starting epoch 15/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 14) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 14) - ETA: 10.0min
+  Batch 200/3553 (Epoch 14) - ETA: 9.9min
+  Batch 300/3553 (Epoch 14) - ETA: 9.7min
+  Batch 400/3553 (Epoch 14) - ETA: 9.4min
+  Batch 500/3553 (Epoch 14) - ETA: 9.1min
+  Batch 600/3553 (Epoch 14) - ETA: 8.9min
+  Batch 700/3553 (Epoch 14) - ETA: 8.6min
+  Batch 800/3553 (Epoch 14) - ETA: 8.4min
+  Batch 900/3553 (Epoch 14) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 14) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 14) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 14) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 14) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 14) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 14) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 14) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 14) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 14) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 14) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 14) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 14) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 14) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 14) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 14) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 14) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 14) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 14) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 14) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 14) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 14) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 14) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 14) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 14) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 14) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 14) - ETA: 0.2min
+Epoch 14, Train Loss: 0.001241, Differential Loss: 0.018208
+Starting epoch 16/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 15) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.25 hours
+  Batch 100/3553 (Epoch 15) - ETA: 10.4min
+  Batch 200/3553 (Epoch 15) - ETA: 10.3min
+  Batch 300/3553 (Epoch 15) - ETA: 10.0min
+  Batch 400/3553 (Epoch 15) - ETA: 9.6min
+  Batch 500/3553 (Epoch 15) - ETA: 9.3min
+  Batch 600/3553 (Epoch 15) - ETA: 9.0min
+  Batch 700/3553 (Epoch 15) - ETA: 8.7min
+  Batch 800/3553 (Epoch 15) - ETA: 8.4min
+  Batch 900/3553 (Epoch 15) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 15) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 15) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 15) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 15) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 15) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 15) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 15) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 15) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 15) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 15) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 15) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 15) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 15) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 15) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 15) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 15) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 15) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 15) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 15) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 15) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 15) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 15) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 15) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 15) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 15) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 15) - ETA: 0.2min
+Epoch 15, Train Loss: 0.001183, Differential Loss: 0.017863
+Starting epoch 17/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 16) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 16) - ETA: 10.6min
+  Batch 200/3553 (Epoch 16) - ETA: 10.3min
+  Batch 300/3553 (Epoch 16) - ETA: 10.0min
+  Batch 400/3553 (Epoch 16) - ETA: 9.7min
+  Batch 500/3553 (Epoch 16) - ETA: 9.2min
+  Batch 600/3553 (Epoch 16) - ETA: 9.0min
+  Batch 700/3553 (Epoch 16) - ETA: 8.7min
+  Batch 800/3553 (Epoch 16) - ETA: 8.4min
+  Batch 900/3553 (Epoch 16) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 16) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 16) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 16) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 16) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 16) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 16) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 16) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 16) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 16) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 16) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 16) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 16) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 16) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 16) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 16) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 16) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 16) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 16) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 16) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 16) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 16) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 16) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 16) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 16) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 16) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 16) - ETA: 0.2min
+Epoch 16, Train Loss: 0.001127, Differential Loss: 0.017516
+Starting epoch 18/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 17) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.25 hours
+  Batch 100/3553 (Epoch 17) - ETA: 9.9min
+  Batch 200/3553 (Epoch 17) - ETA: 9.7min
+  Batch 300/3553 (Epoch 17) - ETA: 9.4min
+  Batch 400/3553 (Epoch 17) - ETA: 9.2min
+  Batch 500/3553 (Epoch 17) - ETA: 9.0min
+  Batch 600/3553 (Epoch 17) - ETA: 8.8min
+  Batch 700/3553 (Epoch 17) - ETA: 8.5min
+  Batch 800/3553 (Epoch 17) - ETA: 8.2min
+  Batch 900/3553 (Epoch 17) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 17) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 17) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 17) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 17) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 17) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 17) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 17) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 17) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 17) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 17) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 17) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 17) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 17) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 17) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 17) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 17) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 17) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 17) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 17) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 17) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 17) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 17) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 17) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 17) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 17) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 17) - ETA: 0.2min
+Epoch 17, Train Loss: 0.001085, Differential Loss: 0.017219
+Starting epoch 19/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 18) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 18) - ETA: 10.3min
+  Batch 200/3553 (Epoch 18) - ETA: 10.2min
+  Batch 300/3553 (Epoch 18) - ETA: 9.8min
+  Batch 400/3553 (Epoch 18) - ETA: 9.5min
+  Batch 500/3553 (Epoch 18) - ETA: 9.2min
+  Batch 600/3553 (Epoch 18) - ETA: 9.0min
+  Batch 700/3553 (Epoch 18) - ETA: 8.6min
+  Batch 800/3553 (Epoch 18) - ETA: 8.3min
+  Batch 900/3553 (Epoch 18) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 18) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 18) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 18) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 18) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 18) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 18) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 18) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 18) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 18) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 18) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 18) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 18) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 18) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 18) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 18) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 18) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 18) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 18) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 18) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 18) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 18) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 18) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 18) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 18) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 18) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 18) - ETA: 0.2min
+Epoch 18, Train Loss: 0.001037, Differential Loss: 0.016932
+Starting epoch 20/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 19) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 19) - ETA: 10.6min
+  Batch 200/3553 (Epoch 19) - ETA: 10.2min
+  Batch 300/3553 (Epoch 19) - ETA: 9.9min
+  Batch 400/3553 (Epoch 19) - ETA: 9.6min
+  Batch 500/3553 (Epoch 19) - ETA: 9.3min
+  Batch 600/3553 (Epoch 19) - ETA: 9.0min
+  Batch 700/3553 (Epoch 19) - ETA: 8.7min
+  Batch 800/3553 (Epoch 19) - ETA: 8.4min
+  Batch 900/3553 (Epoch 19) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 19) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 19) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 19) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 19) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 19) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 19) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 19) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 19) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 19) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 19) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 19) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 19) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 19) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 19) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 19) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 19) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 19) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 19) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 19) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 19) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 19) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 19) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 19) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 19) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 19) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 19) - ETA: 0.2min
+Epoch 19, Train Loss: 0.001002, Differential Loss: 0.016677
+Starting epoch 21/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 20) - ETA: 0.0min
+  First batch took 0.27s
+  Estimated epoch time: 0.27 hours
+  Batch 100/3553 (Epoch 20) - ETA: 10.1min
+  Batch 200/3553 (Epoch 20) - ETA: 10.0min
+  Batch 300/3553 (Epoch 20) - ETA: 9.8min
+  Batch 400/3553 (Epoch 20) - ETA: 9.5min
+  Batch 500/3553 (Epoch 20) - ETA: 9.2min
+  Batch 600/3553 (Epoch 20) - ETA: 8.9min
+  Batch 700/3553 (Epoch 20) - ETA: 8.6min
+  Batch 800/3553 (Epoch 20) - ETA: 8.3min
+  Batch 900/3553 (Epoch 20) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 20) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 20) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 20) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 20) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 20) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 20) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 20) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 20) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 20) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 20) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 20) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 20) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 20) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 20) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 20) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 20) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 20) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 20) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 20) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 20) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 20) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 20) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 20) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 20) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 20) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 20) - ETA: 0.2min
+Epoch 20, Train Loss: 0.000961, Differential Loss: 0.016406
+Starting epoch 22/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 21) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 21) - ETA: 10.3min
+  Batch 200/3553 (Epoch 21) - ETA: 10.2min
+  Batch 300/3553 (Epoch 21) - ETA: 9.9min
+  Batch 400/3553 (Epoch 21) - ETA: 9.6min
+  Batch 500/3553 (Epoch 21) - ETA: 9.3min
+  Batch 600/3553 (Epoch 21) - ETA: 8.9min
+  Batch 700/3553 (Epoch 21) - ETA: 8.7min
+  Batch 800/3553 (Epoch 21) - ETA: 8.4min
+  Batch 900/3553 (Epoch 21) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 21) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 21) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 21) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 21) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 21) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 21) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 21) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 21) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 21) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 21) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 21) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 21) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 21) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 21) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 21) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 21) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 21) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 21) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 21) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 21) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 21) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 21) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 21) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 21) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 21) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 21) - ETA: 0.2min
+Epoch 21, Train Loss: 0.000926, Differential Loss: 0.016177
+Starting epoch 23/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 22) - ETA: 0.0min
+  First batch took 0.26s
+  Estimated epoch time: 0.26 hours
+  Batch 100/3553 (Epoch 22) - ETA: 10.3min
+  Batch 200/3553 (Epoch 22) - ETA: 10.2min
+  Batch 300/3553 (Epoch 22) - ETA: 9.9min
+  Batch 400/3553 (Epoch 22) - ETA: 9.6min
+  Batch 500/3553 (Epoch 22) - ETA: 9.3min
+  Batch 600/3553 (Epoch 22) - ETA: 9.0min
+  Batch 700/3553 (Epoch 22) - ETA: 8.7min
+  Batch 800/3553 (Epoch 22) - ETA: 8.4min
+  Batch 900/3553 (Epoch 22) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 22) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 22) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 22) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 22) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 22) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 22) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 22) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 22) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 22) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 22) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 22) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 22) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 22) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 22) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 22) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 22) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 22) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 22) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 22) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 22) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 22) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 22) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 22) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 22) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 22) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 22) - ETA: 0.2min
+Epoch 22, Train Loss: 0.000898, Differential Loss: 0.015968
+Starting epoch 24/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 23) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 23) - ETA: 10.6min
+  Batch 200/3553 (Epoch 23) - ETA: 10.2min
+  Batch 300/3553 (Epoch 23) - ETA: 9.9min
+  Batch 400/3553 (Epoch 23) - ETA: 9.5min
+  Batch 500/3553 (Epoch 23) - ETA: 9.2min
+  Batch 600/3553 (Epoch 23) - ETA: 8.8min
+  Batch 700/3553 (Epoch 23) - ETA: 8.6min
+  Batch 800/3553 (Epoch 23) - ETA: 8.3min
+  Batch 900/3553 (Epoch 23) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 23) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 23) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 23) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 23) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 23) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 23) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 23) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 23) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 23) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 23) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 23) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 23) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 23) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 23) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 23) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 23) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 23) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 23) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 23) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 23) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 23) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 23) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 23) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 23) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 23) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 23) - ETA: 0.2min
+Epoch 23, Train Loss: 0.000868, Differential Loss: 0.015744
+Starting epoch 25/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 24) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 24) - ETA: 10.6min
+  Batch 200/3553 (Epoch 24) - ETA: 10.3min
+  Batch 300/3553 (Epoch 24) - ETA: 9.9min
+  Batch 400/3553 (Epoch 24) - ETA: 9.7min
+  Batch 500/3553 (Epoch 24) - ETA: 9.3min
+  Batch 600/3553 (Epoch 24) - ETA: 9.1min
+  Batch 700/3553 (Epoch 24) - ETA: 8.8min
+  Batch 800/3553 (Epoch 24) - ETA: 8.5min
+  Batch 900/3553 (Epoch 24) - ETA: 8.2min
+  Batch 1000/3553 (Epoch 24) - ETA: 7.9min
+  Batch 1100/3553 (Epoch 24) - ETA: 7.6min
+  Batch 1200/3553 (Epoch 24) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 24) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 24) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 24) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 24) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 24) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 24) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 24) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 24) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 24) - ETA: 4.5min
+  Batch 2200/3553 (Epoch 24) - ETA: 4.2min
+  Batch 2300/3553 (Epoch 24) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 24) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 24) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 24) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 24) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 24) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 24) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 24) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 24) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 24) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 24) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 24) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 24) - ETA: 0.2min
+Epoch 24, Train Loss: 0.000843, Differential Loss: 0.015550
+Starting epoch 26/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 25) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 25) - ETA: 10.1min
+  Batch 200/3553 (Epoch 25) - ETA: 10.0min
+  Batch 300/3553 (Epoch 25) - ETA: 9.8min
+  Batch 400/3553 (Epoch 25) - ETA: 9.5min
+  Batch 500/3553 (Epoch 25) - ETA: 9.2min
+  Batch 600/3553 (Epoch 25) - ETA: 8.9min
+  Batch 700/3553 (Epoch 25) - ETA: 8.7min
+  Batch 800/3553 (Epoch 25) - ETA: 8.4min
+  Batch 900/3553 (Epoch 25) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 25) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 25) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 25) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 25) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 25) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 25) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 25) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 25) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 25) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 25) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 25) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 25) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 25) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 25) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 25) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 25) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 25) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 25) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 25) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 25) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 25) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 25) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 25) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 25) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 25) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 25) - ETA: 0.2min
+Epoch 25, Train Loss: 0.000818, Differential Loss: 0.015360
+Starting epoch 27/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 26) - ETA: 0.0min
+  First batch took 0.26s
+  Estimated epoch time: 0.25 hours
+  Batch 100/3553 (Epoch 26) - ETA: 10.7min
+  Batch 200/3553 (Epoch 26) - ETA: 10.5min
+  Batch 300/3553 (Epoch 26) - ETA: 10.1min
+  Batch 400/3553 (Epoch 26) - ETA: 9.6min
+  Batch 500/3553 (Epoch 26) - ETA: 9.3min
+  Batch 600/3553 (Epoch 26) - ETA: 9.0min
+  Batch 700/3553 (Epoch 26) - ETA: 8.6min
+  Batch 800/3553 (Epoch 26) - ETA: 8.4min
+  Batch 900/3553 (Epoch 26) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 26) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 26) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 26) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 26) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 26) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 26) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 26) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 26) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 26) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 26) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 26) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 26) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 26) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 26) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 26) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 26) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 26) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 26) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 26) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 26) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 26) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 26) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 26) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 26) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 26) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 26) - ETA: 0.2min
+Epoch 26, Train Loss: 0.000808, Differential Loss: 0.015206
+Starting epoch 28/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 27) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 27) - ETA: 10.4min
+  Batch 200/3553 (Epoch 27) - ETA: 10.1min
+  Batch 300/3553 (Epoch 27) - ETA: 9.8min
+  Batch 400/3553 (Epoch 27) - ETA: 9.5min
+  Batch 500/3553 (Epoch 27) - ETA: 9.3min
+  Batch 600/3553 (Epoch 27) - ETA: 8.9min
+  Batch 700/3553 (Epoch 27) - ETA: 8.6min
+  Batch 800/3553 (Epoch 27) - ETA: 8.3min
+  Batch 900/3553 (Epoch 27) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 27) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 27) - ETA: 7.3min
+  Batch 1200/3553 (Epoch 27) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 27) - ETA: 6.7min
+  Batch 1400/3553 (Epoch 27) - ETA: 6.4min
+  Batch 1500/3553 (Epoch 27) - ETA: 6.1min
+  Batch 1600/3553 (Epoch 27) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 27) - ETA: 5.5min
+  Batch 1800/3553 (Epoch 27) - ETA: 5.2min
+  Batch 1900/3553 (Epoch 27) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 27) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 27) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 27) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 27) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 27) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 27) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 27) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 27) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 27) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 27) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 27) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 27) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 27) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 27) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 27) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 27) - ETA: 0.2min
+Epoch 27, Train Loss: 0.000777, Differential Loss: 0.015015
+Starting epoch 29/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 28) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 28) - ETA: 10.1min
+  Batch 200/3553 (Epoch 28) - ETA: 10.1min
+  Batch 300/3553 (Epoch 28) - ETA: 9.8min
+  Batch 400/3553 (Epoch 28) - ETA: 9.6min
+  Batch 500/3553 (Epoch 28) - ETA: 9.3min
+  Batch 600/3553 (Epoch 28) - ETA: 9.0min
+  Batch 700/3553 (Epoch 28) - ETA: 8.7min
+  Batch 800/3553 (Epoch 28) - ETA: 8.4min
+  Batch 900/3553 (Epoch 28) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 28) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 28) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 28) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 28) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 28) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 28) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 28) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 28) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 28) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 28) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 28) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 28) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 28) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 28) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 28) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 28) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 28) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 28) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 28) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 28) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 28) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 28) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 28) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 28) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 28) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 28) - ETA: 0.2min
+Epoch 28, Train Loss: 0.000756, Differential Loss: 0.014858
+Starting epoch 30/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 29) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 29) - ETA: 10.5min
+  Batch 200/3553 (Epoch 29) - ETA: 10.2min
+  Batch 300/3553 (Epoch 29) - ETA: 10.0min
+  Batch 400/3553 (Epoch 29) - ETA: 9.8min
+  Batch 500/3553 (Epoch 29) - ETA: 9.5min
+  Batch 600/3553 (Epoch 29) - ETA: 9.2min
+  Batch 700/3553 (Epoch 29) - ETA: 8.9min
+  Batch 800/3553 (Epoch 29) - ETA: 8.6min
+  Batch 900/3553 (Epoch 29) - ETA: 8.2min
+  Batch 1000/3553 (Epoch 29) - ETA: 7.9min
+  Batch 1100/3553 (Epoch 29) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 29) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 29) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 29) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 29) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 29) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 29) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 29) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 29) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 29) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 29) - ETA: 4.5min
+  Batch 2200/3553 (Epoch 29) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 29) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 29) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 29) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 29) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 29) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 29) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 29) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 29) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 29) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 29) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 29) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 29) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 29) - ETA: 0.2min
+Epoch 29, Train Loss: 0.000740, Differential Loss: 0.014715
+Starting epoch 31/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 30) - ETA: 0.0min
+  First batch took 0.22s
+  Estimated epoch time: 0.22 hours
+  Batch 100/3553 (Epoch 30) - ETA: 10.6min
+  Batch 200/3553 (Epoch 30) - ETA: 10.4min
+  Batch 300/3553 (Epoch 30) - ETA: 10.0min
+  Batch 400/3553 (Epoch 30) - ETA: 9.6min
+  Batch 500/3553 (Epoch 30) - ETA: 9.3min
+  Batch 600/3553 (Epoch 30) - ETA: 9.0min
+  Batch 700/3553 (Epoch 30) - ETA: 8.7min
+  Batch 800/3553 (Epoch 30) - ETA: 8.4min
+  Batch 900/3553 (Epoch 30) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 30) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 30) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 30) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 30) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 30) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 30) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 30) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 30) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 30) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 30) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 30) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 30) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 30) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 30) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 30) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 30) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 30) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 30) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 30) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 30) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 30) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 30) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 30) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 30) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 30) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 30) - ETA: 0.2min
+Epoch 30, Train Loss: 0.000721, Differential Loss: 0.014557
+Starting epoch 32/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 31) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 31) - ETA: 10.1min
+  Batch 200/3553 (Epoch 31) - ETA: 10.0min
+  Batch 300/3553 (Epoch 31) - ETA: 9.8min
+  Batch 400/3553 (Epoch 31) - ETA: 9.5min
+  Batch 500/3553 (Epoch 31) - ETA: 9.3min
+  Batch 600/3553 (Epoch 31) - ETA: 9.0min
+  Batch 700/3553 (Epoch 31) - ETA: 8.7min
+  Batch 800/3553 (Epoch 31) - ETA: 8.4min
+  Batch 900/3553 (Epoch 31) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 31) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 31) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 31) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 31) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 31) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 31) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 31) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 31) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 31) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 31) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 31) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 31) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 31) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 31) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 31) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 31) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 31) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 31) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 31) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 31) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 31) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 31) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 31) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 31) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 31) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 31) - ETA: 0.2min
+Epoch 31, Train Loss: 0.000705, Differential Loss: 0.014424
+Starting epoch 33/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 32) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 32) - ETA: 10.3min
+  Batch 200/3553 (Epoch 32) - ETA: 10.0min
+  Batch 300/3553 (Epoch 32) - ETA: 9.7min
+  Batch 400/3553 (Epoch 32) - ETA: 9.4min
+  Batch 500/3553 (Epoch 32) - ETA: 9.1min
+  Batch 600/3553 (Epoch 32) - ETA: 8.8min
+  Batch 700/3553 (Epoch 32) - ETA: 8.5min
+  Batch 800/3553 (Epoch 32) - ETA: 8.2min
+  Batch 900/3553 (Epoch 32) - ETA: 7.9min
+  Batch 1000/3553 (Epoch 32) - ETA: 7.6min
+  Batch 1100/3553 (Epoch 32) - ETA: 7.3min
+  Batch 1200/3553 (Epoch 32) - ETA: 7.0min
+  Batch 1300/3553 (Epoch 32) - ETA: 6.7min
+  Batch 1400/3553 (Epoch 32) - ETA: 6.4min
+  Batch 1500/3553 (Epoch 32) - ETA: 6.1min
+  Batch 1600/3553 (Epoch 32) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 32) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 32) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 32) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 32) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 32) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 32) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 32) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 32) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 32) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 32) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 32) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 32) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 32) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 32) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 32) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 32) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 32) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 32) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 32) - ETA: 0.2min
+Epoch 32, Train Loss: 0.000692, Differential Loss: 0.014285
+Starting epoch 34/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 33) - ETA: 0.0min
+  First batch took 0.26s
+  Estimated epoch time: 0.26 hours
+  Batch 100/3553 (Epoch 33) - ETA: 10.6min
+  Batch 200/3553 (Epoch 33) - ETA: 10.3min
+  Batch 300/3553 (Epoch 33) - ETA: 10.0min
+  Batch 400/3553 (Epoch 33) - ETA: 9.7min
+  Batch 500/3553 (Epoch 33) - ETA: 9.2min
+  Batch 600/3553 (Epoch 33) - ETA: 8.9min
+  Batch 700/3553 (Epoch 33) - ETA: 8.6min
+  Batch 800/3553 (Epoch 33) - ETA: 8.3min
+  Batch 900/3553 (Epoch 33) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 33) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 33) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 33) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 33) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 33) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 33) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 33) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 33) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 33) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 33) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 33) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 33) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 33) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 33) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 33) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 33) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 33) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 33) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 33) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 33) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 33) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 33) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 33) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 33) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 33) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 33) - ETA: 0.2min
+Epoch 33, Train Loss: 0.000671, Differential Loss: 0.014131
+Starting epoch 35/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 34) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 34) - ETA: 10.1min
+  Batch 200/3553 (Epoch 34) - ETA: 10.3min
+  Batch 300/3553 (Epoch 34) - ETA: 9.9min
+  Batch 400/3553 (Epoch 34) - ETA: 9.7min
+  Batch 500/3553 (Epoch 34) - ETA: 9.4min
+  Batch 600/3553 (Epoch 34) - ETA: 9.1min
+  Batch 700/3553 (Epoch 34) - ETA: 8.7min
+  Batch 800/3553 (Epoch 34) - ETA: 8.4min
+  Batch 900/3553 (Epoch 34) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 34) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 34) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 34) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 34) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 34) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 34) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 34) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 34) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 34) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 34) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 34) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 34) - ETA: 4.5min
+  Batch 2200/3553 (Epoch 34) - ETA: 4.2min
+  Batch 2300/3553 (Epoch 34) - ETA: 3.9min
+  Batch 2400/3553 (Epoch 34) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 34) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 34) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 34) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 34) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 34) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 34) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 34) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 34) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 34) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 34) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 34) - ETA: 0.2min
+Epoch 34, Train Loss: 0.000662, Differential Loss: 0.014030
+Starting epoch 36/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 35) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 35) - ETA: 10.5min
+  Batch 200/3553 (Epoch 35) - ETA: 10.2min
+  Batch 300/3553 (Epoch 35) - ETA: 9.9min
+  Batch 400/3553 (Epoch 35) - ETA: 9.6min
+  Batch 500/3553 (Epoch 35) - ETA: 9.3min
+  Batch 600/3553 (Epoch 35) - ETA: 9.0min
+  Batch 700/3553 (Epoch 35) - ETA: 8.7min
+  Batch 800/3553 (Epoch 35) - ETA: 8.4min
+  Batch 900/3553 (Epoch 35) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 35) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 35) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 35) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 35) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 35) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 35) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 35) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 35) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 35) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 35) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 35) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 35) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 35) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 35) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 35) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 35) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 35) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 35) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 35) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 35) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 35) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 35) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 35) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 35) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 35) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 35) - ETA: 0.2min
+Epoch 35, Train Loss: 0.000650, Differential Loss: 0.013921
+Starting epoch 37/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 36) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 36) - ETA: 10.5min
+  Batch 200/3553 (Epoch 36) - ETA: 10.2min
+  Batch 300/3553 (Epoch 36) - ETA: 9.9min
+  Batch 400/3553 (Epoch 36) - ETA: 9.6min
+  Batch 500/3553 (Epoch 36) - ETA: 9.2min
+  Batch 600/3553 (Epoch 36) - ETA: 8.9min
+  Batch 700/3553 (Epoch 36) - ETA: 8.6min
+  Batch 800/3553 (Epoch 36) - ETA: 8.3min
+  Batch 900/3553 (Epoch 36) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 36) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 36) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 36) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 36) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 36) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 36) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 36) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 36) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 36) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 36) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 36) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 36) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 36) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 36) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 36) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 36) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 36) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 36) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 36) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 36) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 36) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 36) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 36) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 36) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 36) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 36) - ETA: 0.2min
+Epoch 36, Train Loss: 0.000638, Differential Loss: 0.013803
+Starting epoch 38/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 37) - ETA: 0.0min
+  First batch took 0.25s
+  Estimated epoch time: 0.25 hours
+  Batch 100/3553 (Epoch 37) - ETA: 10.7min
+  Batch 200/3553 (Epoch 37) - ETA: 10.4min
+  Batch 300/3553 (Epoch 37) - ETA: 10.0min
+  Batch 400/3553 (Epoch 37) - ETA: 9.6min
+  Batch 500/3553 (Epoch 37) - ETA: 9.4min
+  Batch 600/3553 (Epoch 37) - ETA: 9.1min
+  Batch 700/3553 (Epoch 37) - ETA: 8.7min
+  Batch 800/3553 (Epoch 37) - ETA: 8.4min
+  Batch 900/3553 (Epoch 37) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 37) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 37) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 37) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 37) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 37) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 37) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 37) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 37) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 37) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 37) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 37) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 37) - ETA: 4.5min
+  Batch 2200/3553 (Epoch 37) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 37) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 37) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 37) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 37) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 37) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 37) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 37) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 37) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 37) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 37) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 37) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 37) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 37) - ETA: 0.2min
+Epoch 37, Train Loss: 0.000628, Differential Loss: 0.013705
+Starting epoch 39/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 38) - ETA: 0.0min
+  First batch took 0.22s
+  Estimated epoch time: 0.22 hours
+  Batch 100/3553 (Epoch 38) - ETA: 10.2min
+  Batch 200/3553 (Epoch 38) - ETA: 10.0min
+  Batch 300/3553 (Epoch 38) - ETA: 9.7min
+  Batch 400/3553 (Epoch 38) - ETA: 9.4min
+  Batch 500/3553 (Epoch 38) - ETA: 9.1min
+  Batch 600/3553 (Epoch 38) - ETA: 8.9min
+  Batch 700/3553 (Epoch 38) - ETA: 8.6min
+  Batch 800/3553 (Epoch 38) - ETA: 8.3min
+  Batch 900/3553 (Epoch 38) - ETA: 8.0min
+  Batch 1000/3553 (Epoch 38) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 38) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 38) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 38) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 38) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 38) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 38) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 38) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 38) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 38) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 38) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 38) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 38) - ETA: 4.0min
+  Batch 2300/3553 (Epoch 38) - ETA: 3.7min
+  Batch 2400/3553 (Epoch 38) - ETA: 3.4min
+  Batch 2500/3553 (Epoch 38) - ETA: 3.1min
+  Batch 2600/3553 (Epoch 38) - ETA: 2.8min
+  Batch 2700/3553 (Epoch 38) - ETA: 2.5min
+  Batch 2800/3553 (Epoch 38) - ETA: 2.2min
+  Batch 2900/3553 (Epoch 38) - ETA: 1.9min
+  Batch 3000/3553 (Epoch 38) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 38) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 38) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 38) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 38) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 38) - ETA: 0.2min
+Epoch 38, Train Loss: 0.000614, Differential Loss: 0.013593
+Starting epoch 40/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 39) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 39) - ETA: 10.5min
+  Batch 200/3553 (Epoch 39) - ETA: 10.1min
+  Batch 300/3553 (Epoch 39) - ETA: 9.8min
+  Batch 400/3553 (Epoch 39) - ETA: 9.5min
+  Batch 500/3553 (Epoch 39) - ETA: 9.3min
+  Batch 600/3553 (Epoch 39) - ETA: 9.0min
+  Batch 700/3553 (Epoch 39) - ETA: 8.7min
+  Batch 800/3553 (Epoch 39) - ETA: 8.4min
+  Batch 900/3553 (Epoch 39) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 39) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 39) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 39) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 39) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 39) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 39) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 39) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 39) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 39) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 39) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 39) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 39) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 39) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 39) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 39) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 39) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 39) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 39) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 39) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 39) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 39) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 39) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 39) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 39) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 39) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 39) - ETA: 0.2min
+Epoch 39, Train Loss: 0.000608, Differential Loss: 0.013514
+Starting epoch 41/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 40) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.22 hours
+  Batch 100/3553 (Epoch 40) - ETA: 10.5min
+  Batch 200/3553 (Epoch 40) - ETA: 10.3min
+  Batch 300/3553 (Epoch 40) - ETA: 10.1min
+  Batch 400/3553 (Epoch 40) - ETA: 9.8min
+  Batch 500/3553 (Epoch 40) - ETA: 9.5min
+  Batch 600/3553 (Epoch 40) - ETA: 9.1min
+  Batch 700/3553 (Epoch 40) - ETA: 8.8min
+  Batch 800/3553 (Epoch 40) - ETA: 8.4min
+  Batch 900/3553 (Epoch 40) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 40) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 40) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 40) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 40) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 40) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 40) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 40) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 40) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 40) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 40) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 40) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 40) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 40) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 40) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 40) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 40) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 40) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 40) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 40) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 40) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 40) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 40) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 40) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 40) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 40) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 40) - ETA: 0.2min
+Epoch 40, Train Loss: 0.000593, Differential Loss: 0.013394
+Starting epoch 42/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 41) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 41) - ETA: 10.6min
+  Batch 200/3553 (Epoch 41) - ETA: 10.3min
+  Batch 300/3553 (Epoch 41) - ETA: 9.9min
+  Batch 400/3553 (Epoch 41) - ETA: 9.7min
+  Batch 500/3553 (Epoch 41) - ETA: 9.3min
+  Batch 600/3553 (Epoch 41) - ETA: 9.0min
+  Batch 700/3553 (Epoch 41) - ETA: 8.7min
+  Batch 800/3553 (Epoch 41) - ETA: 8.4min
+  Batch 900/3553 (Epoch 41) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 41) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 41) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 41) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 41) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 41) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 41) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 41) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 41) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 41) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 41) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 41) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 41) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 41) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 41) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 41) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 41) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 41) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 41) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 41) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 41) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 41) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 41) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 41) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 41) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 41) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 41) - ETA: 0.2min
+Epoch 41, Train Loss: 0.000583, Differential Loss: 0.013302
+Starting epoch 43/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 42) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 42) - ETA: 10.3min
+  Batch 200/3553 (Epoch 42) - ETA: 10.2min
+  Batch 300/3553 (Epoch 42) - ETA: 9.9min
+  Batch 400/3553 (Epoch 42) - ETA: 9.7min
+  Batch 500/3553 (Epoch 42) - ETA: 9.3min
+  Batch 600/3553 (Epoch 42) - ETA: 9.0min
+  Batch 700/3553 (Epoch 42) - ETA: 8.7min
+  Batch 800/3553 (Epoch 42) - ETA: 8.4min
+  Batch 900/3553 (Epoch 42) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 42) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 42) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 42) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 42) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 42) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 42) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 42) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 42) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 42) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 42) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 42) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 42) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 42) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 42) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 42) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 42) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 42) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 42) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 42) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 42) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 42) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 42) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 42) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 42) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 42) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 42) - ETA: 0.2min
+Epoch 42, Train Loss: 0.000577, Differential Loss: 0.013216
+Starting epoch 44/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 43) - ETA: 0.0min
+  First batch took 0.22s
+  Estimated epoch time: 0.22 hours
+  Batch 100/3553 (Epoch 43) - ETA: 10.2min
+  Batch 200/3553 (Epoch 43) - ETA: 10.0min
+  Batch 300/3553 (Epoch 43) - ETA: 9.9min
+  Batch 400/3553 (Epoch 43) - ETA: 9.6min
+  Batch 500/3553 (Epoch 43) - ETA: 9.3min
+  Batch 600/3553 (Epoch 43) - ETA: 9.0min
+  Batch 700/3553 (Epoch 43) - ETA: 8.8min
+  Batch 800/3553 (Epoch 43) - ETA: 8.5min
+  Batch 900/3553 (Epoch 43) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 43) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 43) - ETA: 7.6min
+  Batch 1200/3553 (Epoch 43) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 43) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 43) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 43) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 43) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 43) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 43) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 43) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 43) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 43) - ETA: 4.5min
+  Batch 2200/3553 (Epoch 43) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 43) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 43) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 43) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 43) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 43) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 43) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 43) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 43) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 43) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 43) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 43) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 43) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 43) - ETA: 0.2min
+Epoch 43, Train Loss: 0.000567, Differential Loss: 0.013132
+Starting epoch 45/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 44) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 44) - ETA: 10.6min
+  Batch 200/3553 (Epoch 44) - ETA: 10.4min
+  Batch 300/3553 (Epoch 44) - ETA: 10.1min
+  Batch 400/3553 (Epoch 44) - ETA: 9.8min
+  Batch 500/3553 (Epoch 44) - ETA: 9.5min
+  Batch 600/3553 (Epoch 44) - ETA: 9.2min
+  Batch 700/3553 (Epoch 44) - ETA: 8.8min
+  Batch 800/3553 (Epoch 44) - ETA: 8.5min
+  Batch 900/3553 (Epoch 44) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 44) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 44) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 44) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 44) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 44) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 44) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 44) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 44) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 44) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 44) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 44) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 44) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 44) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 44) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 44) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 44) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 44) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 44) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 44) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 44) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 44) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 44) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 44) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 44) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 44) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 44) - ETA: 0.2min
+Epoch 44, Train Loss: 0.000559, Differential Loss: 0.013031
+Starting epoch 46/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 45) - ETA: 0.0min
+  First batch took 0.22s
+  Estimated epoch time: 0.22 hours
+  Batch 100/3553 (Epoch 45) - ETA: 10.5min
+  Batch 200/3553 (Epoch 45) - ETA: 10.2min
+  Batch 300/3553 (Epoch 45) - ETA: 9.9min
+  Batch 400/3553 (Epoch 45) - ETA: 9.6min
+  Batch 500/3553 (Epoch 45) - ETA: 9.3min
+  Batch 600/3553 (Epoch 45) - ETA: 9.0min
+  Batch 700/3553 (Epoch 45) - ETA: 8.7min
+  Batch 800/3553 (Epoch 45) - ETA: 8.4min
+  Batch 900/3553 (Epoch 45) - ETA: 8.2min
+  Batch 1000/3553 (Epoch 45) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 45) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 45) - ETA: 7.2min
+  Batch 1300/3553 (Epoch 45) - ETA: 6.9min
+  Batch 1400/3553 (Epoch 45) - ETA: 6.6min
+  Batch 1500/3553 (Epoch 45) - ETA: 6.3min
+  Batch 1600/3553 (Epoch 45) - ETA: 6.0min
+  Batch 1700/3553 (Epoch 45) - ETA: 5.7min
+  Batch 1800/3553 (Epoch 45) - ETA: 5.4min
+  Batch 1900/3553 (Epoch 45) - ETA: 5.1min
+  Batch 2000/3553 (Epoch 45) - ETA: 4.8min
+  Batch 2100/3553 (Epoch 45) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 45) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 45) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 45) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 45) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 45) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 45) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 45) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 45) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 45) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 45) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 45) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 45) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 45) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 45) - ETA: 0.2min
+Epoch 45, Train Loss: 0.000555, Differential Loss: 0.012976
+Starting epoch 47/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 46) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.24 hours
+  Batch 100/3553 (Epoch 46) - ETA: 10.6min
+  Batch 200/3553 (Epoch 46) - ETA: 10.5min
+  Batch 300/3553 (Epoch 46) - ETA: 10.2min
+  Batch 400/3553 (Epoch 46) - ETA: 9.8min
+  Batch 500/3553 (Epoch 46) - ETA: 9.4min
+  Batch 600/3553 (Epoch 46) - ETA: 9.1min
+  Batch 700/3553 (Epoch 46) - ETA: 8.7min
+  Batch 800/3553 (Epoch 46) - ETA: 8.4min
+  Batch 900/3553 (Epoch 46) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 46) - ETA: 7.7min
+  Batch 1100/3553 (Epoch 46) - ETA: 7.4min
+  Batch 1200/3553 (Epoch 46) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 46) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 46) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 46) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 46) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 46) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 46) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 46) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 46) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 46) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 46) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 46) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 46) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 46) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 46) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 46) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 46) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 46) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 46) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 46) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 46) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 46) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 46) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 46) - ETA: 0.2min
+Epoch 46, Train Loss: 0.000544, Differential Loss: 0.012886
+Starting epoch 48/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 47) - ETA: 0.0min
+  First batch took 0.24s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 47) - ETA: 10.4min
+  Batch 200/3553 (Epoch 47) - ETA: 10.1min
+  Batch 300/3553 (Epoch 47) - ETA: 9.8min
+  Batch 400/3553 (Epoch 47) - ETA: 9.4min
+  Batch 500/3553 (Epoch 47) - ETA: 9.2min
+  Batch 600/3553 (Epoch 47) - ETA: 8.9min
+  Batch 700/3553 (Epoch 47) - ETA: 8.7min
+  Batch 800/3553 (Epoch 47) - ETA: 8.4min
+  Batch 900/3553 (Epoch 47) - ETA: 8.1min
+  Batch 1000/3553 (Epoch 47) - ETA: 7.8min
+  Batch 1100/3553 (Epoch 47) - ETA: 7.5min
+  Batch 1200/3553 (Epoch 47) - ETA: 7.1min
+  Batch 1300/3553 (Epoch 47) - ETA: 6.8min
+  Batch 1400/3553 (Epoch 47) - ETA: 6.5min
+  Batch 1500/3553 (Epoch 47) - ETA: 6.2min
+  Batch 1600/3553 (Epoch 47) - ETA: 5.9min
+  Batch 1700/3553 (Epoch 47) - ETA: 5.6min
+  Batch 1800/3553 (Epoch 47) - ETA: 5.3min
+  Batch 1900/3553 (Epoch 47) - ETA: 5.0min
+  Batch 2000/3553 (Epoch 47) - ETA: 4.7min
+  Batch 2100/3553 (Epoch 47) - ETA: 4.4min
+  Batch 2200/3553 (Epoch 47) - ETA: 4.1min
+  Batch 2300/3553 (Epoch 47) - ETA: 3.8min
+  Batch 2400/3553 (Epoch 47) - ETA: 3.5min
+  Batch 2500/3553 (Epoch 47) - ETA: 3.2min
+  Batch 2600/3553 (Epoch 47) - ETA: 2.9min
+  Batch 2700/3553 (Epoch 47) - ETA: 2.6min
+  Batch 2800/3553 (Epoch 47) - ETA: 2.3min
+  Batch 2900/3553 (Epoch 47) - ETA: 2.0min
+  Batch 3000/3553 (Epoch 47) - ETA: 1.7min
+  Batch 3100/3553 (Epoch 47) - ETA: 1.4min
+  Batch 3200/3553 (Epoch 47) - ETA: 1.1min
+  Batch 3300/3553 (Epoch 47) - ETA: 0.8min
+  Batch 3400/3553 (Epoch 47) - ETA: 0.5min
+  Batch 3500/3553 (Epoch 47) - ETA: 0.2min
+Epoch 47, Train Loss: 0.000535, Differential Loss: 0.012801
+Starting epoch 49/200
+Total batches in epoch: 3553
+  Batch 0/3553 (Epoch 48) - ETA: 0.0min
+  First batch took 0.23s
+  Estimated epoch time: 0.23 hours
+  Batch 100/3553 (Epoch 48) - ETA: 10.2min
+  Batch 200/3553 (Epoch 48) - ETA: 10.0min

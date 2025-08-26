@@ -2,7 +2,6 @@
 👨‍💻 Copyright (C) $2024 Omer Tariq KAIST. - All Rights Reserved
 
 Project: TRIP
-Manuscript is submitted to IEEE Sensor Journal
 
 """
 
@@ -21,7 +20,7 @@ from tensorboardX import SummaryWriter
 from torch.utils.data import DataLoader
 from sklearn import metrics
 from preprocess.data_processor import *
-from metric import compute_ate_rte, compute_absolute_trajectory_error, compute_drift
+from metric_tlio import compute_ate_rte, compute_absolute_trajectory_error, compute_drift
 # from models.MobileNetV2 import *
 # from models.MobileNet import *
 # from models.MnasNet import *
@@ -69,18 +68,73 @@ def get_model(arch):
 
 
 def run_test(network, data_loader, device, eval_mode=True):
+    """
+    Updated run_test function to handle both TRIP and TLIO data formats.
+    """
     targets_all = []
     preds_all = []
     if eval_mode:
         network.eval()
-    for bid, (feat, targ, _, _) in enumerate(data_loader):
-        pred = network(feat.to(device)).cpu().detach().numpy()
-        targets_all.append(targ.detach().numpy())
-        preds_all.append(pred)
+    
+    for bid, batch in enumerate(data_loader):
+        with torch.no_grad():
+            # Handle different batch formats
+            if isinstance(batch, dict):
+                # TLIO format
+                feat = batch["feats"]["imu0"]  # [B, 6, T]
+                targ = batch["targ_dt_World"]  # [B, T, 3] or [B, 1, 3]
+                
+                # Handle target shape variations
+                if len(targ.shape) == 3:
+                    if targ.shape[1] == 1:
+                        targ = targ.squeeze(1)  # [B, 3]
+                    else:
+                        targ = targ[:, -1, :]  # [B, 3] - take last timestep
+                elif len(targ.shape) == 2:
+                    pass  # Already [B, 3]
+                else:
+                    targ = targ.view(-1, 3)  # Reshape to [B, 3]
+                    
+                # Ensure feature format is correct for the network
+                if len(feat.shape) == 3:  # [B, 6, T]
+                    if feat.shape[2] != network.window_size if hasattr(network, 'window_size') else 200:
+                        # Pad or truncate if needed
+                        target_size = getattr(network, 'window_size', 200)
+                        if feat.shape[2] < target_size:
+                            padding = torch.zeros(feat.shape[0], feat.shape[1], 
+                                                target_size - feat.shape[2], 
+                                                device=feat.device)
+                            feat = torch.cat([feat, padding], dim=2)
+                        else:
+                            feat = feat[:, :, :target_size]
+                elif len(feat.shape) == 2:  # [B, 6]
+                    # Expand to sequence format
+                    target_size = getattr(network, 'window_size', 200)
+                    feat = feat.unsqueeze(2).repeat(1, 1, target_size)
+                    
+            else:
+                # Original TRIP format: (feat, targ, _, _)
+                feat, targ, _, _ = batch
+            
+            feat, targ = feat.to(device), targ.to(device)
+            
+            # Get prediction
+            if hasattr(network, 'forward') and callable(getattr(network, 'forward')):
+                pred = network(feat).cpu().detach().numpy()
+            else:
+                # Handle different network output formats
+                output = network(feat)
+                if isinstance(output, tuple):
+                    pred = output[0].cpu().detach().numpy()  # Take first output (mean)
+                else:
+                    pred = output.cpu().detach().numpy()
+            
+            targets_all.append(targ.cpu().detach().numpy())
+            preds_all.append(pred)
+
     targets_all = np.concatenate(targets_all, axis=0)
     preds_all = np.concatenate(preds_all, axis=0)
     return targets_all, preds_all
-
 
 def add_summary(writer, loss, step, mode):
     names = '{0}_loss/loss_x,{0}_loss/loss_y,{0}_loss/loss_z,{0}_loss/loss_sin,{0}_loss/loss_cos'.format(
@@ -309,7 +363,7 @@ def train(args, **kwargs):
 
     start_epoch = 0
     if args.continue_from is not None and osp.exists(args.continue_from):
-        checkpoints = torch.load(args.continue_from)
+        checkpoints = torch.load(args.continue_from, weights_only=False) 
         start_epoch = checkpoints.get('epoch', 0)
         network.load_state_dict(checkpoints['model_state_dict'])
         optimizer.load_state_dict(checkpoints['optimizer_state_dict'])
@@ -589,55 +643,261 @@ def train(args, **kwargs):
     return train_losses_all, val_losses_all, diff_losses_all
 
 
+# def recon_traj_with_preds(dataset, preds, seq_id=0, **kwargs):
+#     """
+#     Reconstruct trajectory with predicted global velocities.
+#     Updated to support both 2D and 3D trajectories.
+#     """
+#     # Determine if we're using TLIO (3D) or original datasets (2D)
+#     use_3d = hasattr(dataset, 'get_ts_last_imu_us') and hasattr(dataset, 'get_gt_traj_center_window_times')
+#     output_dim = preds.shape[1]  # Should be 2 for 2D datasets, 3 for TLIO
+    
+#     if use_3d:
+#         # TLIO dataset - use native methods
+#         ts = dataset.get_ts_last_imu_us(seq_id) * 1e-6  # Convert to seconds
+        
+#         # Get ground truth trajectory
+#         if hasattr(dataset, 'get_gt_traj_center_window_times'):
+#             try:
+#                 gt_data = dataset.get_gt_traj_center_window_times(seq_id)
+#                 if isinstance(gt_data, tuple) and len(gt_data) == 2:
+#                     # Returns (rotation, position)
+#                     gt_rot, gt_pos = gt_data
+#                     pos_gt = gt_pos  # Already in correct format
+#                 else:
+#                     # Returns SE3 matrices
+#                     gt_traj_SE3 = gt_data
+#                     pos_gt = gt_traj_SE3[:, :3, 3]  # Extract positions
+#             except:
+#                 # Fallback: create dummy ground truth
+#                 print("Warning: Could not extract ground truth trajectory, using dummy data")
+#                 pos_gt = np.zeros((len(ts), 3))
+#         else:
+#             pos_gt = np.zeros((len(ts), 3))
+            
+#         # Calculate time differences
+#         if len(ts) > 1:
+#             dts = np.mean(ts[1:] - ts[:-1])
+#         else:
+#             dts = 0.005  # Default 200Hz
+            
+#         # Reconstruct trajectory from velocity predictions
+#         pos = np.zeros([preds.shape[0] + 1, output_dim])
+#         if len(pos_gt) > 0:
+#             pos[0] = pos_gt[0, :output_dim]  # Initialize with first GT position
+        
+#         # Integrate velocities
+#         pos[1:] = np.cumsum(preds * dts, axis=0) + pos[0]
+        
+#         # Interpolate if needed to match ground truth timestamps
+#         if len(pos) != len(pos_gt):
+#             from scipy.interpolate import interp1d
+#             ts_pred = np.linspace(ts[0], ts[-1], len(pos))
+#             if len(ts) > 1:
+#                 pos_interp = interp1d(ts_pred, pos, axis=0, fill_value="extrapolate")(ts)
+#                 pos = pos_interp
+            
+#     else:
+#         # Original TRIP datasets (2D)
+#         if hasattr(dataset, 'ts') and hasattr(dataset, 'gt_pos'):
+#             ts = dataset.ts[seq_id]
+#             gt_pos = dataset.gt_pos[seq_id]
+#         else:
+#             # Fallback for datasets without direct access
+#             ts = np.arange(len(preds)) * 0.05  # Assume 20Hz
+#             gt_pos = np.zeros((len(preds), 2))
+            
+#         ind = np.array([i[1] for i in dataset.index_map if i[0] == seq_id], dtype=int)
+#         dts = np.mean(ts[ind[1:]] - ts[ind[:-1]]) if len(ind) > 1 else 0.05
+        
+#         pos = np.zeros([preds.shape[0] + 2, output_dim])
+#         pos[0] = gt_pos[0, :output_dim]
+#         pos[1:-1] = np.cumsum(preds[:, :output_dim] * dts, axis=0) + pos[0]
+#         pos[-1] = pos[-2]
+        
+#         # Interpolate to match timestamps
+#         ts_ext = np.concatenate([[ts[0] - 1e-06], ts[ind], [ts[-1] + 1e-06]], axis=0)
+#         from scipy.interpolate import interp1d
+#         pos = interp1d(ts_ext, pos, axis=0)(ts)
+    
+#     return pos
+
 def recon_traj_with_preds(dataset, preds, seq_id=0, **kwargs):
     """
     Reconstruct trajectory with predicted global velocities.
+    Updated to support both 2D and 3D trajectories.
     """
-    ts = dataset.ts[seq_id]
-    #ind = np.array([i[1] for i in dataset.index_map if i[0] == seq_id], dtype=np.int)
-    ind = np.array([i[1] for i in dataset.index_map if i[0] == seq_id], dtype=int)
-    dts = np.mean(ts[ind[1:]] - ts[ind[:-1]])
-    pos = np.zeros([preds.shape[0] + 2, 2])
-    pos[0] = dataset.gt_pos[seq_id][0, :2]
-    pos[1:-1] = np.cumsum(preds[:, :2] * dts, axis=0) + pos[0]
-    pos[-1] = pos[-2]
-    ts_ext = np.concatenate([[ts[0] - 1e-06], ts[ind], [ts[-1] + 1e-06]], axis=0)
-    pos = interp1d(ts_ext, pos, axis=0)(ts)
+    # Determine if we're using TLIO (3D) or original datasets (2D)
+    use_3d = hasattr(dataset, 'get_ts_last_imu_us') and hasattr(dataset, 'get_gt_traj_center_window_times')
+    output_dim = preds.shape[1]  # Should be 2 for 2D datasets, 3 for TLIO
+    
+    if use_3d:
+        # TLIO dataset - use native methods
+        ts = dataset.get_ts_last_imu_us(seq_id) * 1e-6  # Convert to seconds
+        
+        # Get ground truth trajectory
+        if hasattr(dataset, 'get_gt_traj_center_window_times'):
+            try:
+                gt_data = dataset.get_gt_traj_center_window_times(seq_id)
+                if isinstance(gt_data, tuple) and len(gt_data) == 2:
+                    # Returns (rotation, position)
+                    gt_rot, gt_pos = gt_data
+                    pos_gt = gt_pos  # Already in correct format
+                else:
+                    # Returns SE3 matrices
+                    gt_traj_SE3 = gt_data
+                    pos_gt = gt_traj_SE3[:, :3, 3]  # Extract positions
+            except:
+                # Fallback: create dummy ground truth
+                print("Warning: Could not extract ground truth trajectory, using dummy data")
+                pos_gt = np.zeros((len(ts), 3))
+        else:
+            pos_gt = np.zeros((len(ts), 3))
+            
+        # Calculate time differences
+        if len(ts) > 1:
+            dts = np.mean(ts[1:] - ts[:-1])
+        else:
+            dts = 0.005  # Default 200Hz
+            
+        # Reconstruct trajectory from velocity predictions
+        pos = np.zeros([preds.shape[0] + 1, output_dim])
+        if len(pos_gt) > 0:
+            pos[0] = pos_gt[0, :output_dim]  # Initialize with first GT position
+        
+        # Integrate velocities
+        pos[1:] = np.cumsum(preds * dts, axis=0) + pos[0]
+        
+        # Interpolate if needed to match ground truth timestamps
+        if len(pos) != len(pos_gt):
+            from scipy.interpolate import interp1d
+            ts_pred = np.linspace(ts[0], ts[-1], len(pos))
+            if len(ts) > 1:
+                pos_interp = interp1d(ts_pred, pos, axis=0, fill_value="extrapolate")(ts)
+                pos = pos_interp
+            
+    else:
+        # Original TRIP datasets (2D)
+        if hasattr(dataset, 'ts') and hasattr(dataset, 'gt_pos'):
+            ts = dataset.ts[seq_id]
+            gt_pos = dataset.gt_pos[seq_id]
+        else:
+            # Fallback for datasets without direct access
+            ts = np.arange(len(preds)) * 0.05  # Assume 20Hz
+            gt_pos = np.zeros((len(preds), 2))
+            
+        ind = np.array([i[1] for i in dataset.index_map if i[0] == seq_id], dtype=int)
+        dts = np.mean(ts[ind[1:]] - ts[ind[:-1]]) if len(ind) > 1 else 0.05
+        
+        pos = np.zeros([preds.shape[0] + 2, output_dim])
+        pos[0] = gt_pos[0, :output_dim]
+        pos[1:-1] = np.cumsum(preds[:, :output_dim] * dts, axis=0) + pos[0]
+        pos[-1] = pos[-2]
+        
+        # Interpolate to match timestamps
+        ts_ext = np.concatenate([[ts[0] - 1e-06], ts[ind], [ts[-1] + 1e-06]], axis=0)
+        from scipy.interpolate import interp1d
+        pos = interp1d(ts_ext, pos, axis=0)(ts)
+    
     return pos
 
 
 def test_sequence(args):
-    if args.dataset != 'px4' and args.dataset != 'oxiod':
+    """
+    Updated test sequence function to support both TRIP and TLIO datasets.
+    """
+    # IMPORTANT: Set global dimensions for TLIO BEFORE creating the model
+    if args.dataset == 'tlio':
+        global _input_channel, _output_channel
+        _input_channel = 6  # IMU data: 3 accel + 3 gyro
+        _output_channel = 3  # 3D velocity: vx, vy, vz
+        print(f"TLIO test mode: Set _input_channel={_input_channel}, _output_channel={_output_channel}")
+    
+    # Handle dataset loading based on type
+    if args.dataset == 'tlio':
+        print("Testing TLIO dataset...")
+
+        # Use TLIO's native dataloader
+        from dataloader.tlio_data import TlioData
+        from dataloader.memmapped_sequences_dataset import MemMappedSequencesDataset
+        from dataloader.constants import DatasetGenerationParams
+        
+        # Setup data window config for testing
+        data_window_config = DatasetGenerationParams(
+            window_size=args.window_size,
+            step_period_us=5000,  # 5ms = 200Hz
+            prediction_times_us=[0],
+            starting_point_time_us=0,
+            generate_data_period_us=5000,
+            decimator=args.step_size,
+            express_in_t0_yaw_normalized_frame=False,
+            input_sensors=["imu0"],
+            data_style="resampled",
+        )
+        
+        # Get test list for TLIO
         if args.test_path is not None:
-            if args.test_path[-1] == '/':
-                args.test_path = args.test_path[:-1]
-            root_dir = osp.split(args.test_path)[0]
-            test_data_list = [osp.split(args.test_path)[1]]
-        elif args.test_list is not None:
+            test_data_list = [args.test_path.split('/')[-1]]
             root_dir = args.root_dir
-            with open(args.test_list) as f:
-                test_data_list = [s.strip().split(',' or ' ')[0] for s in f.readlines() if len(s) > 0 and s[0] != '#']
         else:
-            raise ValueError('Either test_path or test_list must be specified.')
+            # Try to load from test list file, or scan directory
+            test_list_path = os.path.join(args.root_dir, 'test_list.txt')
+            if os.path.exists(test_list_path):
+                print(f"Loading test list from: {test_list_path}")
+                with open(test_list_path) as f:
+                    test_data_list = [s.strip() for s in f.readlines() if len(s.strip()) > 0 and not s.strip().startswith('#')]
+            else:
+                # Scan directory for sequence folders
+                print(f"No test_list.txt found, scanning directory: {args.root_dir}")
+                test_data_list = []
+                if os.path.exists(args.root_dir):
+                    for item in os.listdir(args.root_dir):
+                        item_path = os.path.join(args.root_dir, item)
+                        if os.path.isdir(item_path):
+                            # Check if it looks like a TLIO sequence (has imu0_resampled.npy)
+                            if os.path.exists(os.path.join(item_path, 'imu0_resampled.npy')):
+                                test_data_list.append(item)
+                
+                if not test_data_list:
+                    raise ValueError(f"No TLIO sequences found in {args.root_dir}. Please ensure the directory contains valid TLIO data or provide a test_list.txt file.")
+                
+                print(f"Found {len(test_data_list)} TLIO sequences: {test_data_list[:5]}{'...' if len(test_data_list) > 5 else ''}")
+            
+            root_dir = args.root_dir
+                
     else:
-        root_dir = args.root_dir + '/validation'
-        test_data_list = os.listdir(root_dir)
-        if args.dataset == 'px4':
-            args.step_size = 1
+        # Original TRIP dataset handling
+        if args.dataset != 'px4' and args.dataset != 'oxiod':
+            if args.test_path is not None:
+                if args.test_path[-1] == '/':
+                    args.test_path = args.test_path[:-1]
+                root_dir = osp.split(args.test_path)[0]
+                test_data_list = [osp.split(args.test_path)[1]]
+            elif args.test_list is not None and args.test_list != '':
+                root_dir = args.root_dir
+                with open(args.test_list) as f:
+                    test_data_list = [s.strip().split(',' or ' ')[0] for s in f.readlines() if len(s) > 0 and s[0] != '#']
+            else:
+                raise ValueError('Either test_path or test_list must be specified.')
+        else:
+            root_dir = args.root_dir + '/validation'
+            test_data_list = os.listdir(root_dir)
+            if args.dataset == 'px4':
+                args.step_size = 1
+
     if args.out_dir is not None and not osp.isdir(args.out_dir):
         os.makedirs(args.out_dir)
 
     device = torch.device('cpu')
-    checkpoint = torch.load(args.model_path, map_location=lambda storage, location: storage)
+    checkpoint = torch.load(args.model_path, map_location=lambda storage, location: storage, weights_only=False)
 
-    _ = get_dataset(root_dir, [test_data_list[0]], args)
-    global _fc_config
-    _fc_config['in_dim'] = args.window_size // 32 + 1
-
+    # Create model
     network = get_model(args)
     network.load_state_dict(checkpoint['model_state_dict'])
     network.eval().to(device)
     print('Model {} loaded to device {}.'.format(args.model_path, device))
+
+    total_test_samples = 0
 
     preds_seq, targets_seq, losses_seq, ate_all, rte_all, d_drift_all = [], [], [], [], [], []
     traj_lens = []
@@ -647,75 +907,188 @@ def test_sequence(args):
 
     for data in test_data_list:
         sequence_start_time = time.time()
-        seq_dataset = get_dataset(root_dir, [data], args, mode='test')
-        seq_loader = DataLoader(seq_dataset, batch_size=1024, shuffle=False)
-        ind = np.array([i[1] for i in seq_dataset.index_map if i[0] == 0], dtype=int)
+        print(f"Processing sequence: {data}")
+        
+        try:
+            if args.dataset == 'tlio':
+                # Use TLIO dataset loading
+                seq_dataset = MemMappedSequencesDataset(
+                    args.root_dir,
+                    "test",
+                    data_window_config,
+                    sequence_subset=[data],
+                    store_in_ram=True,
+                    verbose=True
+                )
+            else:
+                # Use original TRIP dataset loading
+                seq_dataset = get_dataset(root_dir, [data], args, mode='test')
+            
+            seq_loader = DataLoader(seq_dataset, batch_size=1024, shuffle=False)
 
-        targets, preds = run_test(network, seq_loader, device, True)
-        losses = np.mean((targets - preds) ** 2, axis=0)
-        preds_seq.append(preds)
-        targets_seq.append(targets)
-        losses_seq.append(losses)
+            num_samples = len(seq_dataset)
+            total_test_samples += num_samples
+            print(f"Sequence {data}: {num_samples} samples")
+            
+        except Exception as e:
+            print(f"Error loading dataset {data}: {e}")
+            continue
 
-        sequence_end_time = time.time()
-        print(f"Inference time for sequence {data}: {sequence_end_time - sequence_start_time} seconds")
+        # Run inference
+        try:
+            targets, preds = run_test(network, seq_loader, device, True)
+            losses = np.mean((targets - preds) ** 2, axis=0)
+            preds_seq.append(preds)
+            targets_seq.append(targets)
+            losses_seq.append(losses)
 
-        if args.dataset != 'px4':
-            pos_pred = recon_traj_with_preds(seq_dataset, preds)[:, :2]
-            pos_gt = seq_dataset.gt_pos[0][:, :2]
+            sequence_end_time = time.time()
+            print(f"Inference time for sequence {data}: {sequence_end_time - sequence_start_time:.2f} seconds")
 
-            traj_lens.append(np.sum(np.linalg.norm(pos_gt[1:] - pos_gt[:-1], axis=1)))
-            ate, rte = compute_ate_rte(pos_pred, pos_gt, pred_per_min)
-            d_drift = compute_drift(pos_pred, pos_gt)  # Calculate D_drift
-            ate_all.append(ate)
-            rte_all.append(rte)
-            d_drift_all.append(d_drift)  # Append D_drift value
+        except Exception as e:
+            print(f"Error during inference for {data}: {e}")
+            continue
 
-            pos_cum_error = np.linalg.norm(pos_pred - pos_gt, axis=1)
-            print('Sequence {}, loss {} / {}, ate {:.6f}, rte {:.6f}, d_drift {:.2f}%'.format(data, losses, np.mean(losses), ate, rte, d_drift))
+        # Trajectory reconstruction and metrics
+        try:
+            if args.dataset != 'px4':
+                pos_pred = recon_traj_with_preds(seq_dataset, preds)
+                
+                # Get ground truth positions
+                if args.dataset == 'tlio':
+                    # For TLIO, get 3D ground truth
+                    try:
+                        gt_data = seq_dataset.get_gt_traj_center_window_times(0)
+                        if isinstance(gt_data, tuple) and len(gt_data) == 2:
+                            gt_rot, pos_gt = gt_data
+                        else:
+                            # SE3 matrices
+                            pos_gt = gt_data[:, :3, 3]
+                    except:
+                        print(f"Warning: Could not get ground truth for {data}")
+                        pos_gt = np.zeros((len(pos_pred), 3))
+                else:
+                    # Original 2D datasets
+                    pos_gt = seq_dataset.gt_pos[0][:, :2]
+                    pos_pred = pos_pred[:, :2]  # Ensure 2D for original datasets
 
-            # Plot figures as in the original function
-            kp = preds.shape[1]
-            if kp == 2:
-                targ_names = ['vx', 'vy']
-            elif kp == 3:
-                targ_names = ['vx', 'vy', 'vz']
+                # Calculate metrics
+                traj_lens.append(np.sum(np.linalg.norm(pos_gt[1:] - pos_gt[:-1], axis=1)))
+                ate, rte = compute_ate_rte(pos_pred, pos_gt, pred_per_min)
+                d_drift = compute_drift(pos_pred, pos_gt)
+                ate_all.append(ate)
+                rte_all.append(rte)
+                d_drift_all.append(d_drift)
 
-            plt.figure('{}'.format(data), figsize=(16, 9))
-            plt.subplot2grid((kp, 2), (0, 0), rowspan=kp - 1)
-            plt.plot(pos_pred[:, 0], pos_pred[:, 1])
-            plt.plot(pos_gt[:, 0], pos_gt[:, 1])
-            plt.title(data)
-            plt.axis('equal')
-            plt.legend(['Predicted', 'Ground truth'])
-            plt.subplot2grid((kp, 2), (kp - 1, 0))
-            plt.plot(pos_cum_error)
-            plt.legend(['ATE:{:.3f}, RTE:{:.3f}'.format(ate_all[-1], rte_all[-1])])
-            for i in range(kp):
-                plt.subplot2grid((kp, 2), (i, 1))
-                plt.plot(ind, preds[:, i])
-                plt.plot(ind, targets[:, i])
-                plt.legend(['Predicted', 'Ground truth'])
-                plt.title('{}, error: {:.6f}'.format(targ_names[i], losses[i]))
-            plt.tight_layout()
+                pos_cum_error = np.linalg.norm(pos_pred - pos_gt, axis=1)
+                print('Sequence {}, loss {} / {}, ate {:.6f}, rte {:.6f}, d_drift {:.2f}%'.format(
+                    data, losses, np.mean(losses), ate, rte, d_drift))
 
-            if args.show_plot:
-                plt.show()
+                # Plotting
+                kp = preds.shape[1]
+                if kp == 2:
+                    targ_names = ['vx', 'vy']
+                elif kp == 3:
+                    targ_names = ['vx', 'vy', 'vz']
 
-            if args.out_dir is not None and osp.isdir(args.out_dir):
-                np.save(osp.join(args.out_dir, data + '_gsn.npy'),
-                        np.concatenate([pos_pred[:, :2], pos_gt[:, :2]], axis=1))
-                plt.savefig(osp.join(args.out_dir, data + '_gsn.png'))
+                plt.figure('{}'.format(data), figsize=(16, 9))
+                
+                if args.dataset == 'tlio' and kp == 3:
+                    # 3D plotting for TLIO
+                    ax = plt.subplot2grid((kp, 2), (0, 0), rowspan=kp - 1, projection='3d')
+                    ax.plot(pos_pred[:, 0], pos_pred[:, 1], pos_pred[:, 2], label='ResTCA')
+                    ax.plot(pos_gt[:, 0], pos_gt[:, 1], pos_gt[:, 2], label='Ground truth')
+                    ax.set_title(data)
 
-            plt.close('all')
+                        # Set axis labels with increased font size
+                    ax.set_xlabel('X (m)', fontsize=14)
+                    ax.set_ylabel('Y (m)', fontsize=14)
+                    ax.set_zlabel('Z (m)', fontsize=14)
+                    
+                    # Increase tick label font size
+                    ax.tick_params(axis='x', labelsize=14)
+                    ax.tick_params(axis='y', labelsize=14)
+                    ax.tick_params(axis='z', labelsize=14)
+                    
+                    # Remove grey background color in grid
+                    ax.xaxis.pane.fill = False
+                    ax.yaxis.pane.fill = False
+                    ax.zaxis.pane.fill = False
+                    
+                    # Make pane edges white/transparent
+                    ax.xaxis.pane.set_edgecolor('white')
+                    ax.yaxis.pane.set_edgecolor('white') 
+                    ax.zaxis.pane.set_edgecolor('white')
+                    
+                    # Optional: Make grid lines lighter
+                    ax.grid(True, alpha=0.3)
+                    
+                    # Adjust legend to center of the figure (positioned to avoid data overlap)
+                    ax.legend(['ResTCA', 'Ground truth'], 
+                            loc='upper center', 
+                            bbox_to_anchor=(0.5, 0.3),
+                            frameon=True,
+                            fancybox=False,
+                            shadow=False,
+                            ncol=2,
+                            fontsize=12)
+                else:
+                    # 2D plotting for original datasets
+                    plt.subplot2grid((kp, 2), (0, 0), rowspan=kp - 1)
+                    plt.plot(pos_pred[:, 0], pos_pred[:, 1], label='Predicted')
+                    plt.plot(pos_gt[:, 0], pos_gt[:, 1], label='Ground truth')
+                    plt.title(data)
+                    plt.axis('equal')
+                    plt.legend(['Predicted', 'Ground truth'])
+                
+                plt.subplot2grid((kp, 2), (kp - 1, 0))
+                plt.plot(pos_cum_error)
+                plt.legend(['ATE:{:.3f}, RTE:{:.3f}'.format(ate_all[-1], rte_all[-1])])
+                
+                # Plot velocity predictions
+                if hasattr(seq_dataset, 'index_map'):
+                    ind = np.array([i[1] for i in seq_dataset.index_map if i[0] == 0], dtype=int)
+                else:
+                    ind = np.arange(len(preds))
+                    
+                for i in range(kp):
+                    plt.subplot2grid((kp, 2), (i, 1))
+                    plt.plot(ind, preds[:, i])
+                    plt.plot(ind, targets[:, i])
+                    plt.legend(['Predicted', 'Ground truth'])
+                    plt.title('{}, error: {:.6f}'.format(targ_names[i], losses[i]))
+                plt.tight_layout()
 
+                if args.show_plot:
+                    plt.show()
+
+                if args.out_dir is not None and osp.isdir(args.out_dir):
+                    # Save results
+                    if args.dataset == 'tlio':
+                        np.save(osp.join(args.out_dir, data + '_tlio.npy'),
+                                np.concatenate([pos_pred, pos_gt], axis=1))
+                    else:
+                        np.save(osp.join(args.out_dir, data + '_gsn.npy'),
+                                np.concatenate([pos_pred[:, :2], pos_gt[:, :2]], axis=1))
+                    plt.savefig(osp.join(args.out_dir, data + '_gsn.png'))
+
+                plt.close('all')
+                
+        except Exception as e:
+            print(f"Error processing trajectory for {data}: {e}")
+            import traceback
+            traceback.print_exc()
+            continue
+
+    # Final statistics
     losses_seq = np.stack(losses_seq, axis=0)
     losses_avg = np.mean(losses_seq, axis=1)
 
     end_time = time.time()
-    print(f"Total inference time for the test sequence: {end_time - start_time} seconds")
+    print(f"Total inference time for the test sequence: {end_time - start_time:.2f} seconds")
+    print(f"Total test samples across all sequences: {total_test_samples}")
 
-    if args.dataset != 'px4':
+    if args.dataset != 'px4' and len(ate_all) > 0:
         if args.out_dir is not None and osp.isdir(args.out_dir):
             with open(osp.join(args.out_dir, 'losses.csv'), 'w') as f:
                 if losses_seq.shape[1] == 2:
@@ -726,10 +1099,12 @@ def test_sequence(args):
                     f.write('{},'.format(test_data_list[i]))
                     for j in range(losses_seq.shape[1]):
                         f.write('{:.6f},'.format(losses_seq[i][j]))
-                    f.write('{:.6f},{:.6f},{:.6f},{:.2f}\n'.format(losses_avg[i], ate_all[i], rte_all[i], d_drift_all[i]))
+                    f.write('{:.6f},{:.6f},{:.6f},{:.2f}\n'.format(
+                        losses_avg[i], ate_all[i], rte_all[i], d_drift_all[i]))
 
         print('----------\nOverall loss: {}/{}, avg ATE:{}, avg RTE:{}, avg D_drift:{}%'.format(
-            np.average(losses_seq, axis=0), np.average(losses_avg), np.mean(ate_all), np.mean(rte_all), np.mean(d_drift_all)))
+            np.average(losses_seq, axis=0), np.average(losses_avg), 
+            np.mean(ate_all), np.mean(rte_all), np.mean(d_drift_all)))
 
     return losses_avg
 
