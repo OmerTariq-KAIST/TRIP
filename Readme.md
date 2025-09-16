@@ -9,5 +9,5 @@ This is the Pytorch implementation of HResCSA Model for realtime inertial naviga
 4. RIDI dataset can be downloaded from [RIDI](https://www.kaggle.com/code/kmader/ridi-data-overview/data)
 
 # Publication
-The manuscript "TRIP: Towards Realtime Deep Inertial Odometry for Pose-Invariant Pedestrian Navigation" is currently submitted to IEEE Sensor Journal for possible publication.
-The results will be update soon.
+The manuscript "TRIP: Towards Realtime Deep Inertial Odometry for Pose-Invariant Pedestrian Navigation" is currently submitted to IEEE Transactions of Consumer Electronics (TCE) for possible publication.
+The results will be updated soon.
